@@ -2,7 +2,7 @@
 #'
 #' A dataset of all the trees from several parks in the Oregon Health and Science Univerity in Portland, OR.  Collected as part of the Urban Forestry Tree Inventory Project.
 #'
-#' @format A data frame with 15856 rows and 34 variables:
+#' @format A data frame with 875 rows and 34 variables:
 #' \describe{
 #'   \item{user_id}{ID}
 #'   \item{inventory_date}{Date of data collection}
@@ -43,3 +43,4 @@
 #'
 #' }
 #' @source \url{https://www.portlandoregon.gov/parks/article/433143}
+"ohsuTrees"

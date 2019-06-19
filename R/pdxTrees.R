@@ -38,8 +38,6 @@
 #'   \item{species_factoid}{Additional information about the tree}
 #'   \item{longitude}{Longitude}
 #'   \item{latitude}{Latitude}
-#'
-#'
-#'
 #' }
 #' @source \url{https://www.portlandoregon.gov/parks/article/433143}
+"pdxTrees"
