@@ -1,0 +1,13 @@
+Package: pdxTrees
+Type: Package
+Title: Data Package of Portland, OR Park Trees (Title Case)
+Version: 0.1.0
+Authors@R: c(
+    person("Kelly", "McConville", email="mcconville@reed.edu", role = c("aut", "cre"))
+    )
+Maintainer: Kelly McConville <mcconville@reed.edu>
+Description: This package contains datasets from Portland Parks and Recreation.  The city inventoried every tree in over 200 parks. 
+License: GLP-2
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/mcconvil/pdxTrees
