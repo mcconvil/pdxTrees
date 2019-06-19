@@ -1,6 +1,6 @@
 # pdxTrees
 
-Data Package for the inventoried trees in public parks in Portland, OR.  This work was done by the Portland Parks and Recreation's Urban Forestry Tree Inventory Project.  More information on the data can be found [here](Urban Forestry Tree Inventory Project).
+Data Package for the inventoried trees in public parks in Portland, OR.  This work was done by the Portland Parks and Recreation's Urban Forestry Tree Inventory Project.  More information on the data can be found [here](https://www.portlandoregon.gov/parks/article/501565).
 
 
 # Install the package
