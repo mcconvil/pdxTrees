@@ -1,6 +1,6 @@
 Package: pdxTrees
 Type: Package
-Title: Data Package of Portland, OR Park Trees (Title Case)
+Title: Data Package of Portland, OR Park Trees
 Version: 0.1.0
 Authors@R: c(
     person("Kelly", "McConville", email="mcconville@reed.edu", role = c("aut", "cre"))
