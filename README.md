@@ -10,7 +10,7 @@ These data were collected by the Portland Parks and Recreation's Urban Forestry 
 
 
 
-`pdxTrees` is used in a couple Reed College statistics courses as a tool to help students learn and become more comfortable with the functionalities of Rstudio. In Intro to Probablity and Statistics, `pdxTrees` is used to learn the components of graphics, wrangle data with `dplyr`, and create graphs with `ggplot2`. In the Data Science course, the package is used to learn the best practices of function writting, construct interactive maps with `leaflet`, and showcase the usefulness of `lubridate` along with many other R packages. 
+`pdxTrees` is used in multiple Reed College statistics courses as a tool to help students learn and become more comfortable with the functionalities of Rstudio. In Intro to Probablity and Statistics, `pdxTrees` is used to learn the components of graphics, wrangle data with `dplyr`, and create graphs with `ggplot2`. In the Data Science course, the package is used to learn the best practices of function writting, construct interactive maps with `leaflet`, and showcase the usefulness of `lubridate` along with many other R packages. 
 
 
 
