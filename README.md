@@ -6,7 +6,7 @@ These data were collected by the Portland Parks and Recreation's Urban Forestry 
   More information on the data can be found [here](https://www.portlandoregon.gov/parks/article/501565).
 
 
-![](images/pdx_inv_graph.png)
+![](image/pdx_inv_graph.png)
 
 
 
