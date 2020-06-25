@@ -4,7 +4,7 @@ Title: Data Package of Portland, OR Park Trees
 Version: 0.1.0
 Authors@R: c(
     person("Kelly", "McConville", email="mcconville@reed.edu", role = c("aut", "cre"))
-    )
+    person("City of Portland"), email = "Jeff.Ramsey@portlandoregon.gov", role = c("cph"))
 Maintainer: Kelly McConville <mcconville@reed.edu>
 Description: This package contains datasets from Portland Parks and Recreation.  The city inventoried every tree in over 200 parks. 
 Depends:
