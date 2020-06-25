@@ -1,6 +1,6 @@
 # pdxTrees
 
-A Data Package composed of information for all the inventoried trees for public parks and streets in Portland, Or. There are three datasets in the package, `pdxTrees_parks`, which contains data on 25534 trees,`ohsuTrees_parks`, which contains data on 875 trees in the parks surrounding the Oregon Health and Science University, and `pdxTrees_streets`, which contains data on 218,602 trees located on Portland's streets. A street tree is losely defined as a tree generally in the public right-of-way, usually between the sidewalk and the street. 
+A Data Package composed of information for all the inventoried trees in Portland, Or. There are three datasets in the package, `pdxTrees_parks`, which contains data on 25534 trees,`ohsuTrees_parks`, which contains data on 875 trees in the parks surrounding the Oregon Health and Science University, and `pdxTrees_streets`, which contains data on 218,602 trees located on Portland's streets. A street tree is losely defined as a tree generally in the public right-of-way, usually between the sidewalk and the street. Street trees are categorized by one of the 96 Portland neighborhoods and the park trees are categorized by the public parks in which they grow. 
 
 
 
@@ -9,7 +9,7 @@ These data were collected by the Portland Parks and Recreation's Urban Forestry 
 
 
 
-`pdxTrees` is used in multiple Reed College statistics courses as a tool to help students learn and become more comfortable with the functionalities of RStudio. In Intro to Probablity and Statistics, `pdxTrees` is used to learn the components of graphics, wrangle data with `dplyr`, and create graphs with `ggplot2`. In the Data Science course, the package is used to learn the best practices of function writting, construct interactive maps with `leaflet`, and showcase the usefulness of `lubridate` along with many other R packages. 
+`pdxTrees` is used in multiple Reed College statistics courses as a tool to help students learn and become more comfortable with the functionalities of RStudio. In Intro to Probablity and Statistics, `pdxTrees` is used to learn the components of graphics, wrangle data with `dplyr`, and create graphs with `ggplot2`. In the Data Science course, the package is used to teach the best practices of function writting, construct interactive maps with `leaflet`, and showcase the usefulness of `lubridate` along with many other R packages. 
 
 
 
