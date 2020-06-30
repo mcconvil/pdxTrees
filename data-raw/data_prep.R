@@ -1,127 +1,131 @@
 # Libaries
 library(tidyverse)
 library(janitor)
+library(sf)
 #library("stringi")   
 
 # Data Import for pdxTrees_parks 
 
-Parks_Tree_Inventory <- read_csv("data-raw/Parks_Tree_Inventory.csv") 
+park_data <- readxl::read_excel("data-raw/Final_export_2019.xlsx")
 
-Final_export_2019 <- readxl::read_excel("data-raw/Final_export_2019.xlsx")
+spatial_data <- st_read("data-raw/spatial_data_parks/Parks_Tree_Inventory.shp")
+
+
+
 
   # cleaning the spatial data 
-    Parks_Tree_Inventory$Y <- paste0(
-      substr(Parks_Tree_Inventory$Y,1,2),
-      ".",
-      substr(Parks_Tree_Inventory$Y,3,7)
-    )
-  
-    Parks_Tree_Inventory$X <- paste0(
-      substr(Parks_Tree_Inventory$X,1,4),
-      ".",
-      substr(Parks_Tree_Inventory$X,5,9)
-    )
+    spatial_data <- st_transform(spatial_data, 4326)
      
+    spatial_data <- spatial_data %>%
+    dplyr::mutate(Longitude = sf::st_coordinates(.)[,1],
+                  Latitude = sf::st_coordinates(.)[,2])
+    
+
+
   # cleaning the names 
-    Parks_Tree_Inventory <- Parks_Tree_Inventory %>%
-     clean_names() %>%
-     rename(longitude = x,
-             latitude = y) 
-    
   
-    trees_geo<- Parks_Tree_Inventory %>%
-      dplyr::select(longitude, latitude, user_id, genus, family, dbh)
-    
-    trees_all <- incadata::lownames(Final_export_2019) %>%
-      clean_names() %>%
-    rename(user_id = userid)
+    spatial_data <- spatial_data %>%
+      dplyr::select(Longitude, Latitude, UserID, Genus, Family, DBH)
+      
 
 
 # joining the spatial data and creating pdxTrees_parks
-pdxTrees_parks <- trees_all%>%
-  left_join(trees_geo) 
-
+pdxTrees_parks <- spatial_data %>%
+  left_join(park_data) 
 
 # more data cleaning
 
     ## fixing the columns' class 
     pdxTrees_parks <- pdxTrees_parks %>%
-      mutate(inventory_date = lubridate::ymd(inventory_date), 
-             latitude = as.numeric(latitude), 
-             longitude = as.numeric(longitude))
+      mutate(inventory_date = lubridate::ymd(Inventory_Date), 
+             Latitude = as.numeric(Latitude), 
+             Longitude = as.numeric(Longitude))
     
     ## fixing the edible column 
     pdxTrees_parks <- pdxTrees_parks %>%
-      mutate(edible = case_when(edible == "Yes - fruit" ~ "Yes", 
-                               edible == "Yes - nuts" ~ "Yes", 
-                               edible == "Yes" ~ "Yes", 
-                               edible == "No" ~ "No"))
+      mutate(Edible = case_when(Edible == "Yes - fruit" ~ "Yes", 
+                               Edible == "Yes - nuts" ~ "Yes", 
+                               Edible == "Yes" ~ "Yes", 
+                               Edible == "No" ~ "No"))
     
-    
-    ## fixing the common_name column 
-    
-   # pdxTrees_parks <- pdxTrees_parks %>%
-   #   mutate(common_name = stri_trans_totitle(common_name))
-
+    pdxTrees_parks <- pdxTrees_parks %>%
+     dplyr:: select(-c("inventory_date")) %>%
+      st_drop_geometry()
+      
 
 
 # Create a data frame of trees from a few parks near OHSU
 ohsuTrees_parks <- pdxTrees_parks %>%
-  dplyr::filter(park %in% c("Duniway Park", "South Waterfront Park",
+  dplyr::filter(Park %in% c("Duniway Park", "South Waterfront Park",
                             "Elizabeth Caruthers Park", "Lair Hill Park",
                             "Gov Tom McCall Waterfront Park",
                             "SW Terwilliger Blvd Parkway"))
-
 
 # data import for pdxTrees_streets
 
 Street_Trees <- read_csv("data-raw/Street_Trees.csv")
 
-# data cleaning 
+spatial_data_street <- st_read("data-raw/Street_Trees-shp/Street_Trees.shp")
+
+
+
 
     
-  ##cleaning the spatial data 
-    Street_Trees$Y <- paste0(
-      substr(Street_Trees$Y,1,2),
-      ".",
-      substr(Street_Trees$Y,3,7)
-    )
-    
-    Street_Trees$X <- paste0(
-      substr(Street_Trees$X,1,4),
-      ".",
-      substr(Street_Trees$X,5,9)
-    )
-    
+ 
+# cleaning the spatial data 
+spatial_data_street <- st_transform(spatial_data_street, 4326)
+
+spatial_data_street <- spatial_data_street %>%
+  dplyr::mutate(Longitude = sf::st_coordinates(.)[,1],
+                Latitude = sf::st_coordinates(.)[,2])
+
+
     ## renmaing to lat and long and creating pdxTrees_streets
-    pdxTrees_streets <- Street_Trees %>%
-      clean_names() %>%
-      rename(longitude = x,
-             latitude = y)
-    
+
+
+  pdxTrees_streets <- left_join(Street_Trees, spatial_data_street)
+  
+    ## removing extra columsn 
+  pdxTrees_streets <- pdxTrees_streets %>%
+    dplyr::select(-c("X", "Y", "Date_Inven", 
+                  "geometry")) 
+  
+
     ## fixing other column names and date column 
+  
+  
     pdxTrees_streets <- pdxTrees_streets %>%
-      mutate(date_inventoried = lubridate::ymd_hms(`date_inventoried`), 
-             latitude = as.numeric(latitude), 
-             longitude = as.numeric(longitude)) %>%
-      rename(inventory_date = date_inventoried)
+      mutate(Date_Inventoried = lubridate::ymd_hms(`Date_Inventoried`), 
+             Latitude = as.numeric(Latitude), 
+             Longitude = as.numeric(Longitude)) %>%
+      rename("UserID" = "OBJECTID", "Functional_Type" = "FunctionalType", 
+             "Inventory_Date" = "Date_Inventoried")
     
     ##fixing wires column 
     
     pdxTrees_streets <- pdxTrees_streets %>%
-      mutate(wires = case_when(wires == "None" ~ "No HV", 
-                               wires == "none" ~ "No HV", 
-                               wires == "High voltage" ~ "High voltage", 
-                               wires == "Other" ~ "Other", 
-                               wires == "No HV" ~ "No HV"))
-    
-    ## removing planted_by,plant_date, species_description because they are empty columns 
+      mutate(Wires = case_when(Wires == "None" ~ "No HV", 
+                               Wires == "none" ~ "No HV", 
+                               Wires == "High voltage" ~ "High voltage", 
+                               Wires == "Other" ~ "Other", 
+                               Wires == "No HV" ~ "No HV"))
     
     pdxTrees_streets <- pdxTrees_streets %>%
-      select(-c("planted_by", "plant_date", "species_description"))
+      mutate(Edible = case_when(Edible == "fruit" ~ "Yes", 
+                                Edible == "nut" ~ "Yes", 
+                                Edible == "no" ~ "No"))
+    
+    ## removing planted_by,plant_date, species_description because they are empty columns
+    ## and removing duplicate columns 
+    
+    pdxTrees_streets <- pdxTrees_streets %>%
+      select(-c("Planted_By", "Plant_Date", "Species_Description",
+                 "Collected_", "Functional", "Species_De", "Neighborho",
+                "Site_devel"))
     
   
 # Add datafiles to the project
 usethis::use_data(pdxTrees_parks, overwrite = TRUE)
 usethis::use_data(ohsuTrees_parks, overwrite = TRUE)
 usethis::use_data(pdxTrees_streets, overwrite = TRUE)
+
