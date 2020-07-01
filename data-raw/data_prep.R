@@ -50,7 +50,7 @@ pdxTrees_parks <- spatial_data %>%
     
     pdxTrees_parks <- pdxTrees_parks %>%
         dplyr:: select(-c("inventory_date")) %>%
-        st_drop_geometry() %>%
+        sf::st_drop_geometry() %>%
         rename("Common_Name" = "Common name") %>%
         mutate(Common_Name = stringr::str_to_title(Common_Name))
       
@@ -89,8 +89,7 @@ spatial_data_street <- spatial_data_street %>%
   
     ## removing extra columsn 
   pdxTrees_streets <- pdxTrees_streets %>%
-    dplyr::select(-c("X", "Y", "Date_Inven", 
-                  "geometry")) 
+    dplyr::select(-c("X", "Y", "Date_Inven", "geometry")) 
   
 
     ## fixing other column names and date column 
