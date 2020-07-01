@@ -25,10 +25,10 @@ library(tidyverse)
 ```{r}
 
 # a histogram of the inventory date 
-pdxTrees %>%                  
-  count(inventory_date) %>%  
+pdxTrees_parks %>%   
+  count(Inventory_Date) %>%  
   # setting the aesthetics
-  ggplot(aes(x = inventory_date)) +   
+  ggplot(aes(x = Inventory_Date)) +   
   # specifying a histogram and picking color! 
   geom_histogram(bins = 50,               
                  fill = "darkgreen", 
@@ -42,7 +42,7 @@ pdxTrees %>%
 
 ```
 
-Using `ggplot2` we can create a histogram of the `pdxTrees` inventory dates. All the trees seem to be inventoried in the summer months when the weather is nice in Portland. 
+Using `ggplot2` we can create a histogram of the `pdxTrees_parks` inventory dates. The trees were inventoried from 2017 to 2019 with the majority of the trees inventoried in the summer months, when the weather is nice in Portland. 
 
 This graph is only one of example of how `pdxTrees` can be used to create data visulizations. Once you get the basics of `ggplot2` down you can add animation with `gganimate` or create an interactive map with `leaflet`. 
 Aside from visulizations, the data can also be used to run linear regressions, create confidence intervals, and perform many other forms of statistical inference. 
@@ -57,7 +57,7 @@ library(moderndive)
 ```{R linear regression}
 
 # running a linear regression of tree_height on stormwater_Ft
-mod <- lm(pollution_removal_value ~ tree_height, data = pdxTrees)
+mod <- lm(Pollution_Removal_value ~ Tree_Height, data = pdxTrees_parks)
 
 # Coefficients table
 get_regression_table(mod) %>%
@@ -67,13 +67,13 @@ get_regression_table(mod) %>%
 
 ### Interpreting the Regression Table 
 
-Looking at the coefficients from the regression table it does seem like tree height has an affect on pollution removal. An intercept term of $\hat\beta_0 = 1.078$, implies when the tree_height equals zero the `pollution_removal_value` equals 1.078. Obviosuly you wouldn't have a tree that is zero feet tall, but this represents the y-intercept if we graph the regression. $\hat\beta_1 = 0.163$ implies that when the `tree_height` increases by one ft. the `pollution_removal_value` increases by 0.163. The $ \hat\beta_1 $ coefficent represents our slope. The null hypothesis is tree height has no affect on pollution removal and then alternative hypothesis is tree height has an affect on pollution removal. With a p-value of zero we can reject the null hypothesis at a 1\% significance level and support the alternative hypothesis that tree height does have an affect on pollution removal. We can visualize this relationship by plotting the data below with `ggplot2`. 
+Looking at the coefficients from the regression table it does seem like tree height has an affect on pollution removal. An intercept term of $\hat\beta_0 = 1.306$, means when the tree_height equals zero the `pollution_removal_value` is 1.306. Obviosuly you wouldn't have a tree that is zero feet tall, but this represents the y-intercept if we graph the regression. $\hat\beta_1 = 0.104$ implies that when the `tree_height` increases by one ft. the `pollution_removal_value` increases by 0.104. The $ \hat\beta_1 $ coefficent represents our slope. The null hypothesis is tree height has no affect on pollution removal and then alternative hypothesis is tree height has an affect on pollution removal. With a p-value of zero we can reject the null hypothesis at a 1\% significance level and support the alternative hypothesis that tree height does have an affect on pollution removal. We can visualize this relationship by plotting the data below with `ggplot2`. 
 
 ```{R linear regression graph, warning = FALSE}
 
 # visualizing the relationship between the two variables. 
 
-ggplot(pdxTrees, aes(x = tree_height, y = pollution_removal_value )) + 
+ggplot(pdxTrees_parks, aes(x = Tree_Height, y = Pollution_Removal_value )) + 
  # creating a scatterplot 
   geom_point() + 
  # adding the line of best fit
@@ -95,25 +95,27 @@ library(infer)
 ```
 
 ```{R confidence interval}
+
 # the correlation coefficient 
-pdxTrees %>%
-  drop_na(tree_height) %>%
-  drop_na(pollution_removal_value) %>%
-  summarise(cor = cor(tree_height, pollution_removal_value))
+pdxTrees_parks %>%
+  drop_na(Tree_Height) %>%
+  drop_na(Pollution_Removal_value) %>%
+  summarise(cor = cor(Tree_Height, Pollution_Removal_value))
+
 ```
 
-The correlation coefficient is $\rho$ = 0.62. This means that `pollution_removal_value` and `tree_height` have a moderate positive correlation. A correlation coefficient ranges from -1 to 1, with -1  being a strong negative correlation, 1 being a strong postive correlation, and zero indicating no correlation. We can also use `pdxTrees` to create a confidence interval for the correlation coefficient using the bootstrap method. 
+The correlation coefficient is $\rho$ = 0.58. This means that `pollution_removal_value` and `tree_height` have a moderate positive correlation. A correlation coefficient ranges from -1 to 1, with -1  being a strong negative correlation, 1 being a strong postive correlation, and zero indicating no correlation. We can also use `pdxTrees` to create a confidence interval for the correlation coefficient using the bootstrap method. 
 
 ### A Confidence Interval
 ```{R getting a confidence interval using a bootstrap distribution, warning = FALSE }
 
 # creating the bootstrap distribution
-bootstrap_trees <- pdxTrees %>%
+bootstrap_trees <- pdxTrees_parks %>%
   # dropping NA's 
-  drop_na(tree_height) %>%
-  drop_na(pollution_removal_value) %>%
+  drop_na(Tree_Height) %>%
+  drop_na(Pollution_Removal_value) %>%
   # the variables of interest 
-  specify(tree_height ~ pollution_removal_value) %>%
+  specify(Tree_Height ~ Pollution_Removal_value) %>%
   # performing 1000 reps of the bootstrap sampling 
   generate(reps = 1000, type = "bootstrap") %>%
   # specifying a correlation statistic
@@ -133,7 +135,7 @@ ci_95
 ```
 
 ### Intrepreting the results: 
-I am 95% confident that the correlation coefficient lies between 0.611 and 0.63 This means that `tree_height` and `pollution_removal_value` are moderatly postivly correlated. An increase in `tree_height` results in an increase of `pollution_removal_value`, but it is not a strict one to one relationship. Visually we can see that our bootstrap distribution is bellshaped, symmmetric, and centered around the correlation coefficient. Even if our coefficent is the lower bound of our confidence interval there is still a moderate positive correlation. 
+I am 95% confident that the correlation coefficient lies between 0.57 and 0.589 This means that `tree_height` and `pollution_removal_value` are moderatly postivly correlated. An increase in `tree_height` results in an increase of `pollution_removal_value`, but it is not a strict one to one relationship. Visually we can see that our bootstrap distribution is bellshaped, symmmetric, and centered around the correlation coefficient. Even if our coefficent is the lower bound of our confidence interval there is still a moderate positive correlation. 
 
 
 ## An interactive map with `Leaflet` 
@@ -160,8 +162,8 @@ greenLeaflittle <- makeIcon(
 
 # filtering using dplyr to just Berkeley Park 
 
-berkeley_prk <- pdxTrees %>%
-  filter(park == "Berkeley Park")
+berkeley_prk <- pdxTrees_parks %>%
+  filter(Park == "Berkeley Park")
 
 
 # creating the popup label 
@@ -181,12 +183,12 @@ leaflet() %>%
   addProviderTiles(providers$Esri.WorldTopoMap) %>%
   
   # adding circle markers to shade where the tree is located 
-  addCircleMarkers(lng = ~longitude, lat = ~latitude, 
+  addCircleMarkers(lng = ~Longitude, lat = ~Latitude, 
              data = berkeley_prk, 
              radius = 2, fillOpacity = 0.9, 
              color = "darkblue") %>%
   # adding the leaf markers with the popup data on top of the circles markers 
-  addMarkers( ~longitude, ~latitude, 
+  addMarkers( ~Longitude, ~Latitude, 
               icon = greenLeaflittle,
               data = berkeley_prk,
               popup = labels) %>%
@@ -208,15 +210,15 @@ library(gganimate)
 ```{r animated graph}
 # refactoring the categorical mature_size variable 
 berkeley_prk <- berkeley_prk %>%
- mutate(mature_size = fct_relevel(mature_size, "S", "M", "L"))
+ mutate(mature_size = fct_relevel(Mature_Size, "S", "M", "L"))
 
 
 # first creating the graph using ggplot and saving it! 
 berkeley_graph <- berkeley_prk %>%
   # piping in the data 
-                  ggplot( aes(x = tree_height,
-                              y = pollution_removal_value,
-                              color = mature_size)) + 
+                  ggplot( aes(x = Tree_Height,
+                              y = Pollution_Removal_value,
+                              color = Mature_Size)) + 
   # creating the scatterplot 
                   geom_point(size =3  ) +
                   theme_minimal() + 
@@ -242,7 +244,7 @@ berkeley_graph <- berkeley_prk %>%
 # then adding the animation with gganimate functions 
 berkeley_graph + 
   # chosing which variable we want to annimate 
-  transition_states(states = mature_size,
+  transition_states(states = Mature_Size,
                     #how long each point stays before fading away 
                     transition_length = 10,
                     #the time the transition takes
@@ -253,4 +255,4 @@ berkeley_graph +
   exit_shrink()                           
 ```
 
-Unsurprisingly it seems that large have the highest `pollution_removal_value`, but it does seem like there is a lot of overlap between the height categories. 
+Unsurprisingly it seems that large have the highest `Pollution_Eemoval_value`, but it does seem there is a lot of overlap between the height categories. 
