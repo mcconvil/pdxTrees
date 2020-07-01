@@ -41,7 +41,7 @@ pdxTrees_parks <- spatial_data %>%
              Latitude = as.numeric(Latitude), 
              Longitude = as.numeric(Longitude))
     
-    ## fixing the edible column 
+    ## fsome more wrangling 
     pdxTrees_parks <- pdxTrees_parks %>%
       mutate(Edible = case_when(Edible == "Yes - fruit" ~ "Yes", 
                                Edible == "Yes - nuts" ~ "Yes", 
@@ -49,10 +49,12 @@ pdxTrees_parks <- spatial_data %>%
                                Edible == "No" ~ "No"))
     
     pdxTrees_parks <- pdxTrees_parks %>%
-     dplyr:: select(-c("inventory_date")) %>%
-      st_drop_geometry()
+        dplyr:: select(-c("inventory_date")) %>%
+        st_drop_geometry() %>%
+        rename("Common_Name" = "Common name") %>%
+        mutate(Common_Name = stringr::str_to_title(Common_Name))
       
-
+   
 
 # Create a data frame of trees from a few parks near OHSU
 ohsuTrees_parks <- pdxTrees_parks %>%
