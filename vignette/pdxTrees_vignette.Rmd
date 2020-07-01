@@ -24,6 +24,7 @@ library(tidyverse)
 ## A histogram with `ggplot2` 
 ```{r}
 
+
 # a histogram of the inventory date 
 pdxTrees_parks %>%   
   count(Inventory_Date) %>%  
