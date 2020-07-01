@@ -110,7 +110,7 @@ spatial_data_street <- spatial_data_street %>%
                                Wires == "High voltage" ~ "High voltage", 
                                Wires == "Other" ~ "Other", 
                                Wires == "No HV" ~ "No HV"))
-    
+    ## fixing edible column
     pdxTrees_streets <- pdxTrees_streets %>%
       mutate(Edible = case_when(Edible == "fruit" ~ "Yes", 
                                 Edible == "nut" ~ "Yes", 
