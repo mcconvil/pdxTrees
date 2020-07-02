@@ -41,6 +41,7 @@ A data frame with 25534 rows and 34 variables:
   \item{Species_Factoid}{Additional information about the tree}
   \item{Longitude}{Longitude}
   \item{Latitude}{Latitude}
+
 }
 }
 \source{
