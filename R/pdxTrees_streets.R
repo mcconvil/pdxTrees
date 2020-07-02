@@ -7,10 +7,10 @@
 #'   \item{UserID}{ID}
 #'   \item{Inventory_Date}{Date of data collection}
 #'   \item{Species}{Species of the tree.  All dead trees were listed as "unknown"}
-#'   \item{Common}{Common name of the tree}
+#'   \item{Common_Name}{Common name of the tree}
 #'   \item{DBH}{Diameter at breast height (4.5' above ground)}
 #'   \item{Condition}{Trees were rated as good, fair, poor, or dead. These general ratings reflect whether or not a tree is likely to continue contributing to the urban forest (good and fair trees) or whether the tree is at or near the end of its life (poor and dead trees).}
-#'   \item{Site_Type}{Where along the street the tree was located: }
+#'   \item{Site_Type}{Where along the street the tree was located.}
 #'   \item{Site_Size}{Categorical size of the site: Small, Medium, Large}
 #'   \item{Site_Width}{How wide the site was in ft.}
 #'   \item{Wires}{Whether or not the site had wires: High voltage, No High voltage (No HV), other}
@@ -29,4 +29,4 @@
 #'   \item{Latitude}{Latitude}
 #' }
 #' @source \url{https://www.portlandoregon.gov/parks/article/433143}
-"pdxTrees"
+"pdxTrees_streets"

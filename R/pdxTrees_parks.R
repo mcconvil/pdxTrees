@@ -7,7 +7,7 @@
 #'   \item{UserID}{ID}
 #'   \item{Inventory_Date}{Date of data collection}
 #'   \item{Species}{Species of the tree.  All dead trees were listed as "unknown"}
-#'   \item{Common name}{Common name of the tree}
+#'   \item{Common_Name}{Common name of the tree}
 #'   \item{DBH}{Diameter at breast height (4.5' above ground)}
 #'   \item{Condition}{Trees were rated as good, fair, poor, or dead. These general ratings reflect whether or not a tree is likely to continue contributing to the urban forest (good and fair trees) or whether the tree is at or near the end of its life (poor and dead trees).}
 #'   \item{Tree_Height}{Height from the ground to the live top of the tree. For dead trees, total height was measured.}
@@ -19,7 +19,7 @@
 #'   \item{Scientific_Name}{Scientific name of the tree}
 #'   \item{Family}{Family of the tree}
 #'   \item{Genus}{Genus of the tree}
-#'   \item{Functional_type}{Categorial variable with groups: Broadleaf Deciduous (BD), Broadleaf Evergreen (BE), Coniferous Deciduous (CD), and Coniferous Evergreen (CE)}
+#'   \item{Functional_Type}{Categorial variable with groups: Broadleaf Deciduous (BD), Broadleaf Evergreen (BE), Coniferous Deciduous (CD), and Coniferous Evergreen (CE)}
 #'   \item{Mature_Size}{Categorical variable with groups: Large (L), Medium (M), and Small (S).  Categorization is based on  the height, canopy width, and general form of the tree at maturity}
 #'   \item{Native}{Whether or not the tree is native}
 #'   \item{Edible}{Categorical variable of edible trees}
@@ -37,7 +37,7 @@
 #'   \item{Origin}{Origin of the tree}
 #'   \item{Species_Factoid}{Additional information about the tree}
 #'   \item{Longitude}{Longitude}
-#'   \item{latitude}{Latitude}
+#'   \item{Latitude}{Latitude}
 #' }
 #' @source \url{https://www.portlandoregon.gov/parks/article/433143}
-"pdxTrees"
+"pdxTrees_parks"
