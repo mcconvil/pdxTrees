@@ -57,7 +57,7 @@ pdxTrees_parks <- spatial_data %>%
    
 
 # Create a data frame of trees from a few parks near OHSU
-ohsuTrees_parks <- pdxTrees_parks %>%
+ohsuTrees_parks<- pdxTrees_parks %>%
   dplyr::filter(Park %in% c("Duniway Park", "South Waterfront Park",
                             "Elizabeth Caruthers Park", "Lair Hill Park",
                             "Gov Tom McCall Waterfront Park",
