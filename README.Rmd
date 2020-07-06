@@ -20,6 +20,7 @@ These data were collected by the Portland Parks and Recreation's Urban Forestry 
 ```{r, echo= FALSE, warning = FALSE, message=FALSE}
 
 devtools::install_github("mcconvil/pdxTrees")
+install.packages(tidyverse)
 library(pdxTrees)
 library(tidyverse)
 
