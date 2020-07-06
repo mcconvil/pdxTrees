@@ -17,6 +17,32 @@ A Data Package composed of information for all the inventoried trees in Portland
 
 These data were collected by the Portland Parks and Recreation's Urban Forestry Tree Inventory Project.  The Tree Inventory Project has gathered data on Portland trees since 2010, collecting this data in the summer months with a team of over 1,300 volunteers and Forestry employees. The streets trees were inventoried from 2010 to 2016, and the park trees that currently make up `pdxTrees_parks` and `ohsuTrees_parks`, were invetoried from 2017 to 2019. More information on the data can be found [here](https://www.portlandoregon.gov/parks/article/501565).
 
+```{r, include = FALSE, warning = FALSE}
+
+library(pdxTrees)
+library(tidyverse)
+```
+
+```{r, echo=FALSE, warning = FALSE}
+# a histogram of the inventory date 
+pdxTrees_parks %>%   
+  count(Inventory_Date) %>%  
+  # setting the aesthetics
+  ggplot(aes(x = Inventory_Date)) +   
+  # specifying a histogram and picking color! 
+  geom_histogram(bins = 50,               
+                 fill = "darkgreen", 
+                 color = "black") + 
+  labs( x = "Inventory Date", 
+        y = "Count", 
+        title= " When was pdxTrees_parks Inventoried?") + 
+  # adding a theme 
+  theme_minimal() + 
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+
 
 
 
@@ -36,6 +62,6 @@ devtools::install_github("mcconvil/pdxTrees")
 ```
 
 ## Update 
-`pdxTrees` was update on June 25th  to contain three data sets `pdxTrees_parks`, `pdxTrees_streets`, and `ohsuTrees_parks`. New park data from 2019 was added in addition to all of the street tree data. Enjoy!
+`pdxTrees` was update on June 25th  to contain three data sets `pdxTrees_parks`, `pdxTrees_streets`, and `ohsuTrees_parks`. New park data from 2019 was added in addition to all of the street tree data. Enjoy! 
 
 
