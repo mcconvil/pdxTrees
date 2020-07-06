@@ -17,10 +17,12 @@ A Data Package composed of information for all the inventoried trees in Portland
 
 These data were collected by the Portland Parks and Recreation's Urban Forestry Tree Inventory Project.  The Tree Inventory Project has gathered data on Portland trees since 2010, collecting this data in the summer months with a team of over 1,300 volunteers and Forestry employees. The streets trees were inventoried from 2010 to 2016, and the park trees that currently make up `pdxTrees_parks` and `ohsuTrees_parks`, were invetoried from 2017 to 2019. More information on the data can be found [here](https://www.portlandoregon.gov/parks/article/501565).
 
-```{r, include = FALSE, warning = FALSE}
+```{r, echo= FALSE, warning = FALSE, message=FALSE}
 
+devtools::install_github("mcconvil/pdxTrees")
 library(pdxTrees)
 library(tidyverse)
+
 ```
 
 ```{r, echo=FALSE, warning = FALSE}
@@ -53,7 +55,7 @@ pdxTrees_parks %>%
 
 # Install the package
 
-```{r}
+```{r, message=FALSE, warning = FALSE}
 # Do the following once
 # install.packages("devtools")
 
