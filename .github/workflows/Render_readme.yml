@@ -14,8 +14,8 @@ jobs:
       - uses: r-lib/actions/setup-r@v1
       - uses: r-lib/actions/setup-pandoc@v1
       - name: Install packages
-        run: Rscript -e 'install.packages(c("rmarkdown", "readr", "devtools"))'
-      - name: Install CollegeScorecard
+        run: Rscript -e 'install.packages(c("rmarkdown", "readr", "devtools", "tidyverse"))'
+      - name: Install pdxTrees
         run: Rscript -e 'devtools::install_github("mcconvil/pdxTrees")'
       - name: Render README
         run: Rscript -e 'rmarkdown::render("README.Rmd")'
