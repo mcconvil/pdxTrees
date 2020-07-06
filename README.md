@@ -1,3 +1,11 @@
+
+
+![R-CMD-check](https://github.com/mcconvil/pdxTrees/workflows/R-CMD-check/badge.svg)
+![Render README](https://github.com/mcconvil/pdxTrees/workflows/Render%20README/badge.svg)
+
+
+
+
 # pdxTrees
 
 A Data Package composed of information for all the inventoried trees in Portland, Or. There are three datasets in the package, `pdxTrees_parks`, which contains data on 25534 trees,`ohsuTrees_parks`, which contains data on 875 trees in the parks surrounding the Oregon Health and Science University, and `pdxTrees_streets`, which contains data on 218,602 trees located on Portland's streets. A street tree is losely defined as a tree generally in the public right-of-way, usually between the sidewalk and the street. Street trees are categorized by one of the 96 Portland neighborhoods and the park trees are categorized by the public parks in which they grow. 
