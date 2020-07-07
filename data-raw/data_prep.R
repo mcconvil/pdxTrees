@@ -126,20 +126,7 @@ spatial_data_street <- st_read("data-raw/Street_Trees-shp/Street_Trees.shp")
                 "Site_devel")) %>%
         rename("Common_Name" = "Common",
                "Site_Development" = "Site_development")
-      
-      
- ################3     
-      colSums(is.na(pdxTrees_parks))
-     sum(is.na(pdxTrees_streets$Common_Name))
-      
-      pdxTrees_parks %>%
-      count((Collected_By))
-      
-     date <-  pdxTrees_streets %>%
-       filter(!is.na(Inventory_Date))
-     
-     colSums(is.na(pdxTrees_parks))
-  
+    
       
 # Add datafiles to the project
 usethis::use_data(pdxTrees_parks, overwrite = TRUE)
