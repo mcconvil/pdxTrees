@@ -102,6 +102,7 @@ spatial_data_street <- st_read("data-raw/Street_Trees-shp/Street_Trees.shp")
         rename("UserID" = "OBJECTID", "Functional_Type" = "FunctionalType", 
                "Inventory_Date" = "Date_Inventoried")
       
+      
       ##fixing wires column 
       
       pdxTrees_streets <- pdxTrees_streets %>%
@@ -120,13 +121,26 @@ spatial_data_street <- st_read("data-raw/Street_Trees-shp/Street_Trees.shp")
       ## and removing duplicate columns 
       
       pdxTrees_streets <- pdxTrees_streets %>%
-        dplyr::select(-c("Planted_By", "Plant_Date", "Species_Description",
-                  "Collected_", "Functional", "Species_De", "Neighborho",
-                 "Site_devel")) %>%
-        rename("Common_Name" = "Common")
-
+       dplyr::select(-c("Planted_By", "Plant_Date", "Species_Description",
+                 "Collected_", "Functional", "Species_De", "Neighborho",
+                "Site_devel")) %>%
+        rename("Common_Name" = "Common",
+               "Site_Development" = "Site_development")
+      
+      
+ ################3     
+      colSums(is.na(pdxTrees_parks))
+     sum(is.na(pdxTrees_streets$Common_Name))
+      
+      pdxTrees_parks %>%
+      count((Collected_By))
+      
+     date <-  pdxTrees_streets %>%
+       filter(!is.na(Inventory_Date))
+     
+     colSums(is.na(pdxTrees_parks))
   
-  
+      
 # Add datafiles to the project
 usethis::use_data(pdxTrees_parks, overwrite = TRUE)
 usethis::use_data(ohsuTrees_parks, overwrite = TRUE)

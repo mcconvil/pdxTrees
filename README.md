@@ -25,6 +25,8 @@ that currently make up `pdxTrees_parks` and `ohsuTrees_parks`, were
 invetoried from 2017 to 2019. More information on the data can be found
 [here](https://www.portlandoregon.gov/parks/article/501565).
 
+![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
 `pdxTrees` is used in multiple Reed College statistics courses as a tool
 to help students learn and become more comfortable with the
 functionalities of RStudio. In Intro to Probablity and Statistics,
@@ -44,10 +46,16 @@ usefulness of `lubridate` along with many other R packages.
 devtools::install_github("mcconvil/pdxTrees")
 ```
 
-    ## Using bundled GitHub PAT. Please add your own PAT to the env var `GITHUB_PAT`
+    ## Downloading GitHub repo mcconvil/pdxTrees@master
 
-    ## Skipping install of 'pdxTrees' from a github remote, the SHA1 (2dace2ec) has not changed since last install.
-    ##   Use `force = TRUE` to force installation
+    ##      checking for file ‘/private/var/folders/b7/vwwpfhms28n5_gnyv7c2yjmr0000gn/T/Rtmpw0mtvY/remotes16ec066b6369a/mcconvil-pdxTrees-f789dbb/DESCRIPTION’ ...  ✓  checking for file ‘/private/var/folders/b7/vwwpfhms28n5_gnyv7c2yjmr0000gn/T/Rtmpw0mtvY/remotes16ec066b6369a/mcconvil-pdxTrees-f789dbb/DESCRIPTION’ (409ms)
+    ##   ─  preparing ‘pdxTrees’: (374ms)
+    ##      checking DESCRIPTION meta-information ...  ✓  checking DESCRIPTION meta-information
+    ##   ─  checking for LF line-endings in source and make files and shell scripts
+    ##   ─  checking for empty or unneeded directories
+    ##   ─  building ‘pdxTrees_0.1.0.tar.gz’
+    ##      
+    ## 
 
 ## Update
 

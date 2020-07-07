@@ -26,7 +26,7 @@ library(tidyverse)
 
 ```
 
-```{r, echo=FALSE, warning = FALSE}
+```{r, warning = FALSE}
 # a histogram of the inventory date 
 pdxTrees_parks %>%   
   count(Inventory_Date) %>%  

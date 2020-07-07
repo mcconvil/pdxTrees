@@ -6,6 +6,10 @@ Authors@R:
            "McConville",
            role = c("aut", "cre"),
            email = "mcconville@reed.edu"), 
+     person("Isabelle",
+           "Caldwell",
+           role = c("aut"),
+           email = "isacaldw@reed.edu"), 
      person("OR", 
             "City of Portland", 
             role = c("cph"), 
@@ -14,8 +18,12 @@ Maintainer: Kelly McConville <mcconville@reed.edu>
 Description: This package contains datasets from Portland Parks and Recreation.  The city inventoried every tree in over 200 parks and along the streets in 96 neighborhoods. 
 Depends:
     R (>= 3.1)
-License:  GPL-3
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/mcconvil/pdxTrees
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
