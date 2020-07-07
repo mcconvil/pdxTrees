@@ -31,5 +31,6 @@ Suggests:
     gganimate, 
     infer, 
     moderndive,
-    tidyverse
+    tidyverse, 
+    webshot
 VignetteBuilder: knitr
