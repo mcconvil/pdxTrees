@@ -25,5 +25,11 @@ URL: https://github.com/mcconvil/pdxTrees
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown, 
+    leaflet, 
+    leaflet.extras, 
+    gganimate, 
+    infer, 
+    moderndive,
+    tidyverse
 VignetteBuilder: knitr
