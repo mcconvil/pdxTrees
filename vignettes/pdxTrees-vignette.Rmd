@@ -152,6 +152,7 @@ library(leaflet.extras)
 ```{r leaflet graph, fig.width= 8, fig.height=6}
 
 # making the leaf popup icon 
+<<<<<<< HEAD
 greenLeaflittle <- makeIcon(
   iconUrl = "http://leafletjs.com/examples/custom-icons/leaf-green.png",
   iconWidth = 10, iconHeight = 20,
@@ -160,6 +161,16 @@ greenLeaflittle <- makeIcon(
  shadowWidth = 10, shadowHeight = 15,
  shadowAnchorX = 5, shadowAnchorY = 5
 )
+=======
+#greenLeaflittle <- makeIcon(
+#  iconUrl = "http://leafletjs.com/examples/custom-icons/leaf-green.png",
+#  iconWidth = 10, iconHeight = 20,
+#  iconAnchorX = 10, iconAnchorY = 10,
+#  shadowUrl = "http://leafletjs.com/examples/custom-icons/leaf-shadow.png",
+#  shadowWidth = 10, shadowHeight = 15,
+#  shadowAnchorX = 5, shadowAnchorY = 5
+#)
+>>>>>>> 6a84bfd1b12f63d2e435c292be19c5e03cfdf7c7
 
 
 # filtering using dplyr to just Berkeley Park 
@@ -186,7 +197,10 @@ leaflet() %>%
   # adding the leaf markers with the popup data on top of the circles markers 
   addMarkers( ~Longitude, ~Latitude, 
               data = berkeley_prk,
+<<<<<<< HEAD
               icon = greenLeaflittle,
+=======
+>>>>>>> 6a84bfd1b12f63d2e435c292be19c5e03cfdf7c7
               popup = ~labels) %>%
   # adding the mini map at the bottom right corner 
   addMiniMap()
