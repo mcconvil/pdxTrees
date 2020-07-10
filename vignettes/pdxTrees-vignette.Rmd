@@ -187,10 +187,7 @@ leaflet() %>%
   addCircleMarkers( ~Longitude, ~Latitude, 
               data = berkeley_prk,
               color = "Green", 
-<<<<<<< HEAD
-=======
               size = 2,
->>>>>>> d59518ff9b92041ed2a40ed7a272d0be6e5222e0
 #              icon = greenLeaflittle,
               popup = ~labels) %>%
   # adding the mini map at the bottom right corner 
