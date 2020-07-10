@@ -8,7 +8,7 @@ vignette: >
 
 ---
 
-```{r}
+```{r, include = FALSE}
 knitr::opts_chunk$set( echo = TRUE, message = FALSE, warning = FALSE, collapse = TRUE, comment = "#>",  fig.align = "center"
 )
 ```
@@ -186,8 +186,7 @@ leaflet() %>%
   # adding the leaf markers with the popup data on top of the circles markers 
   addCircleMarkers( ~Longitude, ~Latitude, 
               data = berkeley_prk,
-              color = "Green", 
-              size = 2,
+              color = "Green",
 #              icon = greenLeaflittle,
               popup = ~labels) %>%
   # adding the mini map at the bottom right corner 
