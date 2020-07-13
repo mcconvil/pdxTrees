@@ -7,7 +7,7 @@ README](https://github.com/mcconvil/pdxTrees/workflows/Render%20README/badge.svg
 
 A Data Package composed of information for all the inventoried trees in
 Portland, OR. There are three datasets in the package, `pdxTrees_parks`,
-which contains data on 25534 trees,`ohsuTrees_parks`, which contains
+which contains data on 25,534 trees,`ohsuTrees_parks`, which contains
 data on 875 trees in the parks surrounding the Oregon Health and Science
 University, and `pdxTrees_streets`, which contains data on 218,602 trees
 located on Portland’s streets. A street tree is loosely defined as a
@@ -24,6 +24,24 @@ streets trees were inventoried from 2010 to 2016, and the park trees
 that currently make up `pdxTrees_parks` and `ohsuTrees_parks`, were
 inventoried from 2017 to 2019. More information on the data can be found
 [here](https://www.portlandoregon.gov/parks/article/501565).
+
+``` r
+# a histogram of the inventory date 
+pdxTrees_parks %>%   
+  count(Inventory_Date) %>%  
+  # setting the aesthetics
+  ggplot(aes(x = Inventory_Date)) +   
+  # specifying a histogram and picking color! 
+  geom_histogram(bins = 50,               
+                 fill = "darkgreen", 
+                 color = "black") + 
+  labs( x = "Inventory Date", 
+        y = "Count", 
+        title= " When was pdxTrees_parks Inventoried?") + 
+  # adding a theme 
+  theme_minimal() + 
+  theme(plot.title = element_text(hjust = 0.5))
+```
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
@@ -45,9 +63,6 @@ usefulness of `lubridate` along with many other R packages.
 # Then install the package
 devtools::install_github("mcconvil/pdxTrees")
 ```
-
-
-
 
 ## Update
 
