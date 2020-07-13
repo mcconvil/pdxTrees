@@ -152,14 +152,14 @@ library(leaflet.extras)
 ```{r leaflet graph, fig.width= 8, fig.height=6}
 
 # making the leaf popup icon 
-#greenLeaflittle <- makeIcon(
-#  iconUrl = "http://leafletjs.com/examples/custom-icons/leaf-green.png",
-#  iconWidth = 10, iconHeight = 20,
-#  iconAnchorX = 10, iconAnchorY = 10,
-#  shadowUrl = "http://leafletjs.com/examples/custom-icons/leaf-shadow.png",
-# shadowWidth = 10, shadowHeight = 15,
-# shadowAnchorX = 5, shadowAnchorY = 5
-#)
+greenLeaflittle <- makeIcon(
+  iconUrl = "http://leafletjs.com/examples/custom-icons/leaf-green.png",
+  iconWidth = 10, iconHeight = 20,
+  iconAnchorX = 10, iconAnchorY = 10,
+  shadowUrl = "http://leafletjs.com/examples/custom-icons/leaf-shadow.png",
+ shadowWidth = 10, shadowHeight = 15,
+ shadowAnchorX = 5, shadowAnchorY = 5
+)
 
 
 # filtering using dplyr to just Berkeley Park 
@@ -184,10 +184,9 @@ leaflet() %>%
   # setting the background tiles
   addProviderTiles(providers$Esri.WorldTopoMap) %>%
   # adding the leaf markers with the popup data on top of the circles markers 
-  addCircleMarkers( ~Longitude, ~Latitude, 
+  addMarkers( ~Longitude, ~Latitude, 
               data = berkeley_prk,
-              color = "Green",
-#              icon = greenLeaflittle,
+             icon = greenLeaflittle,
               popup = ~labels) %>%
   # adding the mini map at the bottom right corner 
   addMiniMap()
