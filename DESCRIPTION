@@ -26,10 +26,10 @@ RoxygenNote: 7.1.1
 Suggests: 
     knitr,
     rmarkdown, 
+    tidyverse,
     leaflet, 
     leaflet.extras, 
     gganimate, 
     infer, 
-    moderndive,
-    tidyverse
+    moderndive
 VignetteBuilder: knitr

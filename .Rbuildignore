@@ -1,0 +1,8 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^doc$
+^Meta$
+data-raw
+.github 
+README_files
+README.Rmd
