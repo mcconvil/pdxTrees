@@ -3,6 +3,8 @@
 ^doc$
 ^Meta$
 data-raw
-.github 
+^\.github$
+^\.github/workflows/R-CMD-check\.yml$
+^\.github/workflows/Render_readme\.yml$
 README_files
 README.Rmd
