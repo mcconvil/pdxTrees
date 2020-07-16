@@ -195,7 +195,8 @@ Now we can add animation!
 
 ```{R, out.width = "90%"}
 # then adding the animation with gganimate functions 
-berkeley_graph + 
+
+ berkeley_graph + 
   # chosing which variable we want to annimate 
   transition_states(states = Mature_Size,
                     #how long each point stays before fading away 
@@ -205,7 +206,8 @@ berkeley_graph +
   #annimation for the points entering
   enter_grow() +      
   #annimation for the points exiting
-  exit_shrink()                           
+  exit_shrink()
+
 ```
 
 Unsurprisingly it seems that large trees have the highest degree of pollution removal.  However, there is a lot of overlap between the categories that could likely be explained by other key variables, like `Species`.  This is a great opportunity to practice multivariate thinking!
