@@ -238,7 +238,8 @@ berkeley_graph <- berkeley_prk %>%
 
 ```{R, fig.width = 8, fig.height = 6}
 # then adding the animation with gganimate functions 
-berkeley_graph + 
+
+ berkeley_graph + 
   # chosing which variable we want to annimate 
   transition_states(states = Mature_Size,
                     #how long each point stays before fading away 
@@ -248,7 +249,8 @@ berkeley_graph +
   #annimation for the points entering
   enter_grow() +      
   #annimation for the points exiting
-  exit_shrink()                           
+  exit_shrink()
+
 ```
 
 Unsurprisingly it seems that large have the highest `Pollution_Removal_value`, but it does seem there is a lot of overlap between the height categories. 

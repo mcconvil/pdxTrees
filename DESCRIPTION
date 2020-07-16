@@ -31,5 +31,6 @@ Suggests:
     leaflet.extras, 
     gganimate, 
     infer, 
-    moderndive
+    moderndive, 
+    readr
 VignetteBuilder: knitr
