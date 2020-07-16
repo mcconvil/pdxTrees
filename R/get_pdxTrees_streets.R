@@ -1,4 +1,8 @@
-#grab the pdxTrees_streets data from the github
+#' Load the pdxTrees_streets data 
+#' 
+#' 
+#' 
+#' This is a function to pull the pdxTrees_streets data from github. 
 
 
 get_pdxTrees_streets <- function() {

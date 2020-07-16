@@ -185,8 +185,13 @@ berkeley_graph <- berkeley_prk %>%
                   scale_color_brewer(type = "seq", palette = "Set1") + 
   # customizing the title font
                   theme(plot.title = element_text(hjust = 0.5, 
-                                                  size = 12,
-                                                  face = "bold"))
+                                                  size = 8,
+                                                  face = "bold"), 
+                         axis.title.x = element_text(size = 6), 
+                         axis.text = element_text(size = 4),  
+                         axis.title.y = element_text(size = 6), 
+                        legend.title = element_text(size = 6), 
+                        legend.text = element_text(size= 4))
 ```
 
 

@@ -1,4 +1,7 @@
-# grab the pdxTrees_parks data from the github 
+#' Load the pdxTrees_parks data
+#' 
+#' 
+#' This is a function to pull the pdxTrees_parks data from github. 
 
 
 get_pdxTrees_parks <- function() {
