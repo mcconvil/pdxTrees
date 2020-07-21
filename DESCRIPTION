@@ -1,6 +1,6 @@
 Package: pdxTrees
 Title: Data Package of Portland, OR Trees
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: 
    c(person("Kelly",
            "McConville",
@@ -32,5 +32,9 @@ Suggests:
     gganimate, 
     infer, 
     moderndive, 
-    readr
+    readr, 
+    dplyr, 
+    utils
 VignetteBuilder: knitr
+Imports: 
+    magrittr

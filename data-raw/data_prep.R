@@ -44,7 +44,10 @@ pdxTrees_parks <- pdxTrees_parks %>%
   dplyr:: select(-c("inventory_date")) %>%
   sf::st_drop_geometry() %>%
   rename("Common_Name" = "Common name") %>%
-  mutate(Common_Name = stringr::str_to_title(Common_Name))
+  mutate(Common_Name = stringr::str_to_title(Common_Name),
+         Collected_By = stringr::str_to_title(Collected_By),
+         Mature_Size = factor(Mature_Size, levels = c("S", "M", "L")), 
+         UserID = as.character(UserID))
       
 
 #############################################
@@ -119,7 +122,13 @@ pdxTrees_streets <- pdxTrees_streets %>%
                    "Functional", "Species_De", 
                    "Neighborho", "Site_devel")) %>%
   rename("Common_Name" = "Common",
-         "Site_Development" = "Site_development")
+         "Site_Development" = "Site_development") %>%
+  dplyr:: mutate(Neighborhood = str_to_title(Neighborhood), 
+                 Collected_By = str_to_title(Collected_By), 
+                 Common_Name = str_to_title(Common_Name), 
+                 Mature_Size = factor(Size, levels = c("S", "M","L")), 
+                 UserID = as.character(UserID)) %>%
+  dplyr::select(-c("Size"))
 
 # Converting to only a data.frame object
 pdxTrees_streets <- pdxTrees_streets %>%
@@ -133,3 +142,4 @@ usethis::use_data(pdxTrees_parks, overwrite = TRUE,
 #                  compress = "xz", version = 2)
 usethis::use_data(pdxTrees_streets, overwrite = TRUE,
                   compress = "xz", version = 2)
+

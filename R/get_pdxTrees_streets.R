@@ -3,14 +3,49 @@
 #' 
 #' 
 #' This is a function to pull the pdxTrees_streets data from github. 
+#' Portland street trees.
+#'
+#' A dataset of all the street trees in the 96 neighborhoods of Portland, OR.  Collected as part of the Urban Forestry Tree Inventory Project.
+#'
+#' @format A data frame with 218602 rows and 23 variables:
+#' \describe{
+#'   \item{UserID}{ID}
+#'   \item{Inventory_Date}{Date of data collection}
+#'   \item{Species}{Species of the tree.  All dead trees were listed as "unknown"}
+#'   \item{Common_Name}{Common name of the tree}
+#'   \item{DBH}{Diameter at breast height (4.5' above ground)}
+#'   \item{Condition}{Trees were rated as good, fair, poor, or dead. These general ratings reflect whether or not a tree is likely to continue contributing to the urban forest (good and fair trees) or whether the tree is at or near the end of its life (poor and dead trees).}
+#'   \item{Site_Type}{Where along the street the tree was located. There are 8 different site types and more info can be found here: http://gis-pdx.opendata.arcgis.com/datasets/street-trees}
+#'   \item{Site_Size}{Categorical size of the site: Small, Medium, Large}
+#'   \item{Site_Width}{How wide the site was in ft.}
+#'   \item{Wires}{Whether or not the site had wires: High voltage, No High voltage (No HV), other}
+#'   \item{Site_Development}{ The condition of the site either being improved (ex. along a side walk or paved roadway ) or unimproved (a gravel road))}
+#'   \item{Address}{The address where the tree is located}
+#'   \item{Neighborhood}{The Portland neighborhood in which the tree is located}
+#'   \item{Collected_By}{Who collected the data on this tree: staff or volunteer}
+#'   \item{Scientific}{Scientific name of the tree}
+#'   \item{Family}{Family of the tree}
+#'   \item{Genus}{Genus of the tree}
+#'   \item{Functional_Type}{Categorial variable with groups: Broadleaf Deciduous (BD), Broadleaf Evergreen (BE), Coniferous Deciduous (CD), and Coniferous Evergreen (CE)}
+#'   \item{Mature_Size}{Categorical variable with groups: Large (L), Medium (M), and Small (S).  Categorization is based on  the height, canopy width, and general form of the tree at maturity}
+#'   \item{Edible}{Categorical variable of edible trees}
+#'   \item{Notes}{Note on the data collection}
+#'   \item{Longitude}{Longitude}
+#'   \item{Latitude}{Latitude}
+#' }
+#' @source \url{https://www.portlandoregon.gov/parks/article/433143}
+"pdxTrees_streets"
+
+#' apparently this fixes the globalVariable note
+utils::globalVariables(c("Neighborhood"))
 
 
-get_pdxTrees_streets <- function() {
+get_pdxTrees_streets <- function(neighborhood = NULL){
   
 
   # specify column types
-  systems_cols <- readr::cols(
-    "UserID" = readr::col_double(),
+  systems_cols_2 <- readr::cols(
+    "UserID" = readr::col_character(),
     `Inventory_Date` = readr::col_datetime(),
     `Species` = readr::col_character(),
     `DBH` = readr::col_double(),
@@ -29,16 +64,33 @@ get_pdxTrees_streets <- function() {
     `Genus` = readr::col_character(),
     `Common_Name` = readr::col_character(),
     `Functional_Type` = readr::col_character(),
-    `Size` = readr::col_character(),
+    `Mature_Size` = readr::col_factor(),
     `Edible` = readr::col_character(),
     `Longitude` = readr::col_double(), 
     `Latitude` = readr::col_double()
   )
   
   
-  # grab the data
-  readr::read_csv("https://raw.githubusercontent.com/mcconvil/pdxTrees/master/pdxTrees_streets.csv",
-                  col_types = systems_cols)
+# grab the data 
+ data_2 <- readr::read_csv("https://raw.githubusercontent.com/mcconvil/pdxTrees/master/pdxTrees_streets.csv",
+                  col_types = systems_cols_2)
+  
+  # printing the data 
+  if(is.null(neighborhood)){return(data_2)}
+ 
+   else{
+      # error message if neighborhood is not in list 
+      if(!(neighborhood %in% unique(data_2$Neighborhood))) { 
+        
+        stop('Unfortunately the park you listed is not one of the following Neighborhoods:', 
+             print(unique(data_2$Neighborhood)))}
+      
+    
+      data_2 %>%
+        dplyr::filter(Neighborhood %in% c(neighborhood)) %>%
+        return()} 
+  
+  
 }
 
 

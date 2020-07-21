@@ -22,7 +22,7 @@
 #'   \item{Family}{Family of the tree}
 #'   \item{Genus}{Genus of the tree}
 #'   \item{Functional_Type}{Categorial variable with groups: Broadleaf Deciduous (BD), Broadleaf Evergreen (BE), Coniferous Deciduous (CD), and Coniferous Evergreen (CE)}
-#'   \item{Size}{Categorical variable with groups: Large (L), Medium (M), and Small (S).  Categorization is based on  the height, canopy width, and general form of the tree at maturity}
+#'   \item{Mature_Size}{Categorical variable with groups: Large (L), Medium (M), and Small (S).  Categorization is based on  the height, canopy width, and general form of the tree at maturity}
 #'   \item{Edible}{Categorical variable of edible trees}
 #'   \item{Notes}{Note on the data collection}
 #'   \item{Longitude}{Longitude}
