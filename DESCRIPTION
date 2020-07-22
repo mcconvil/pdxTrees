@@ -26,7 +26,6 @@ RoxygenNote: 7.1.1
 Suggests: 
     knitr,
     rmarkdown, 
-    tidyverse,
     leaflet, 
     leaflet.extras, 
     gganimate, 
@@ -37,4 +36,6 @@ Suggests:
     utils
 VignetteBuilder: knitr
 Imports: 
-    magrittr
+    magrittr,
+    tidyverse,
+    rlang

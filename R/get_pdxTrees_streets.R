@@ -1,13 +1,11 @@
-#' Load the pdxTrees_streets data 
+#' @title Load the pdxTrees_streets data
+#' 
+#' @description This function pulls the pdxTrees_streets dataset from the GitHub repository: \url{https://github.com/mcconvil/pdxTrees}. pdxTrees_streets is a data frame of all the street trees in the 96 neighborhoods of Portland, OR and was collected as part of the Urban Forestry Tree Inventory Project.
 #' 
 #' 
+#' @param neighborhood A vector of neighborhood names for filtering the data.  If NULL, all street trees will be returned.
 #' 
-#' This is a function to pull the pdxTrees_streets data from github. 
-#' Portland street trees.
-#'
-#' A dataset of all the street trees in the 96 neighborhoods of Portland, OR.  Collected as part of the Urban Forestry Tree Inventory Project.
-#'
-#' @format A data frame with 218602 rows and 23 variables:
+#' @return A data frame with 218602 rows and 23 variables:
 #' \describe{
 #'   \item{UserID}{ID}
 #'   \item{Inventory_Date}{Date of data collection}
@@ -34,11 +32,8 @@
 #'   \item{Latitude}{Latitude}
 #' }
 #' @source \url{https://www.portlandoregon.gov/parks/article/433143}
-"pdxTrees_streets"
-
-#' apparently this fixes the globalVariable note
-utils::globalVariables(c("Neighborhood"))
-
+#' @export get_pdxTrees_streets
+#' @importFrom rlang .data
 
 get_pdxTrees_streets <- function(neighborhood = NULL){
   
@@ -70,26 +65,25 @@ get_pdxTrees_streets <- function(neighborhood = NULL){
     `Latitude` = readr::col_double()
   )
   
+  # grabbing the data 
+  dat_2 <- readr::read_csv("https://raw.githubusercontent.com/mcconvil/pdxTrees/master/pdxTrees_streets.csv",
+                            col_types = systems_cols_2)
   
-# grab the data 
- data_2 <- readr::read_csv("https://raw.githubusercontent.com/mcconvil/pdxTrees/master/pdxTrees_streets.csv",
-                  col_types = systems_cols_2)
-  
-  # printing the data 
-  if(is.null(neighborhood)){return(data_2)}
+  # returning the data 
+  if(is.null(neighborhood)) { return(dat_2) }
  
-   else{
-      # error message if neighborhood is not in list 
-      if(!(neighborhood %in% unique(data_2$Neighborhood))) { 
+  if(!is.null(neighborhood)) {
+  # error message if all neighborhoods provided are 
+    # not in dat_2$Neighborhood
+      if(sum(neighborhood %in% unique(dat_2$Neighborhood)) == 0) { 
         
         stop('Unfortunately the park you listed is not one of the following Neighborhoods:', 
-             print(unique(data_2$Neighborhood)))}
-      
+             print(paste(unique(dat_2$Neighborhood), collapse = ", ")))
+        }
     
-      data_2 %>%
-        dplyr::filter(Neighborhood %in% c(neighborhood)) %>%
+      dat_2 %>%
+        dplyr::filter(.data$Neighborhood %in% neighborhood) %>%
         return()} 
-  
   
 }
 

@@ -1,13 +1,10 @@
-#' Load the pdxTrees_parks data
+#' @title Load the pdxTrees_parks data
 #' 
-#' 
-#' This is a function to pull the pdxTrees_parks data from github. 
-
-#' Portland park trees.
+#' @description This function pulls the pdxTrees_parks dataset from the GitHub repository: \url{https://github.com/mcconvil/pdxTrees}.  pdxTrees_parks is a data frame of all the trees in 174 parks in Portland, OR and was collected as part of the Urban Forestry Tree Inventory Project.
 #'
-#' A dataset of all the trees in 174 parks in Portland, OR.  Collected as part of the Urban Forestry Tree Inventory Project.
+#' @param park A vector of park names for filtering the data.  If NULL, all park trees will be returned.
 #'
-#' @format A data frame with 25534 rows and 34 variables:
+#' @return Returns a data frame of 34 variables where each row is a tree:
 #' \describe{
 #'   \item{UserID}{ID}
 #'   \item{Inventory_Date}{Date of data collection}
@@ -45,13 +42,11 @@
 #'   \item{Latitude}{Latitude}
 #' }
 #' @source \url{https://www.portlandoregon.gov/parks/article/433143}
-"pdxTrees_parks"
-
-utils::globalVariables(c("Park"))
+#' @export get_pdxTrees_parks
+#' @importFrom rlang .data
 
 
 get_pdxTrees_parks <- function(park = NULL){
-
   
   # specify column types
   systems_cols <- readr::cols(
@@ -89,29 +84,29 @@ get_pdxTrees_parks <- function(park = NULL){
     `Total_Annual_Services` = readr::col_double(),
     `Origin` = readr::col_character(),
     `Species_Factoid` = readr::col_character()
+    ) 
+  
+  # grabbing the data from github
+  dat <- readr::read_csv("https://raw.githubusercontent.com/mcconvil/pdxTrees/master/pdxTrees_parks.csv",
+                        col_types = systems_cols)
+  # returning the data
+  if(is.null(park)){
+    return(dat)}
+  
+  if(!is.null(park)){
     
-  ) 
-  
-  
-# grab the data from github
-data <- readr::read_csv("https://raw.githubusercontent.com/mcconvil/pdxTrees/master/pdxTrees_parks.csv",
-                  col_types = systems_cols)
-
-# printing the data 
-  if(is.null(park)){return(data)}
-  
-    else{
-      # error message if park is not in list 
-      if(!(park %in% unique(data$Park))) { 
+    # error message if all parks provided are not
+    # in dat$Park
+      if(sum(park %in% unique(dat$Park)) == 0) { 
         
-        stop('Unfortunately the park(s) you listed is not one of the following parks:',
-             print(unique(data$Park)))  
+        stop('Unfortunately the park(s) you listed is(are) not one of the following parks:',
+             print(paste(unique(dat$Park), collapse = ", ")))  
       }
   
       
-      data %>%
-        dplyr::filter(Park %in% c(park)) %>%
-      return()} 
+      dat %>%
+        dplyr::filter(.data$Park %in% park) %>%
+      return()
+      } 
     
 } 
-
