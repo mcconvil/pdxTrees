@@ -23,7 +23,7 @@ The street trees are categorized by one of the 96 Portland neighborhoods and the
 
 These data were collected by the [Portland Parks and Recreation's Urban Forestry Tree Inventory Project](https://www.portlandoregon.gov/parks/53181). The Tree Inventory Project has gathered data on Portland trees since 2010, collecting this data in the summer months with a team of over 1,300 volunteers and city employees. The streets trees were inventoried from 2010 to 2016, and the park trees that currently make up `pdxTrees_parks`, were inventoried from 2017 to 2019. More information on the data can be found [here](https://www.portlandoregon.gov/parks/article/501565).
 
-```{r, echo= FALSE, warning = FALSE, message=FALSE}
+```{r, echo= FALSE, warning = FALSE, message=FALSE, include = FALSE}
 devtools::install_github("mcconvil/pdxTrees")
 ```
 
@@ -66,7 +66,7 @@ devtools::install_github("mcconvil/pdxTrees")
 ```
 
 
-\
+
 ## Update/Getting the data
 
 `pdxTrees` was updated in July of 2020 to contain two data loading functions, `get_pdxTrees_parks()` and `get_pdxTrees_streets`, to pull the park and street tree data, respectivly, from the github repository.
