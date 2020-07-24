@@ -17,6 +17,10 @@ Here are some examples of the different ways `pdxTrees` can be used in the class
 
  
 ```{r, include = TRUE, messgae = FALSE}
+# first make sure you have the package downloaded! 
+
+  ## devtools::install_github("mcconvil/pdxTrees")
+
 # Loading the required libraries
 
 library(pdxTrees) 
@@ -24,6 +28,15 @@ library(tidyverse)
 
 ```
 
+First we have to grab the data! To do this we use the `get_pdxTrees_parks` and `get_pdxTrees_streets` functions. For theses examples we are only going to look at the park data. 
+
+```{R}
+
+# leaving the argument field blank pulls data for all of the parks! 
+
+pdxTrees_parks <- get_pdxTrees_parks()
+
+```
 
 ## Graphing with `ggplot2` 
 
@@ -40,7 +53,7 @@ pdxTrees_parks %>%
                  color = "black") + 
   labs( x = "Inventory Date", 
         y = "Count", 
-        title= "When was pdxTrees Inventoried?") + 
+        title= "When was pdxTrees Parks Inventoried?") + 
   # adding a theme 
   theme_minimal() + 
   theme(plot.title = element_text(hjust = 0.5))
@@ -118,10 +131,9 @@ greenLeaflittle <- makeIcon(
 )
 
 
-# filtering using dplyr to just Berkeley Park 
+# Pulling the data for Berkely Park 
 
-berkeley_prk <- pdxTrees_parks %>%
-  filter(Park == "Berkeley Park")
+berkeley_prk <- get_pdxTrees_parks(park = "Berkeley Park")
 
 
 # creating the popup label 

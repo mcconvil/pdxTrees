@@ -6,14 +6,10 @@ README](https://github.com/mcconvil/pdxTrees/workflows/Render%20README/badge.svg
 # pdxTrees
 
 A Data Package composed of information on inventoried trees in Portland,
-OR. There are three datasets in the package:
+OR. There are two datasets in the package:
 
   - `pdxTrees_parks`, which contains data on 25,534 trees from 174
     Portland parks.
-
-  - `ohsuTrees_parks`, which contains data on the 875 trees in the parks
-    surrounding the Oregon Health and Science University – South
-    Waterfront Campus.
 
   - `pdxTrees_streets`, which contains data on 218,602 trees located on
     Portland’s streets. A street tree is loosely defined as a tree
@@ -30,14 +26,17 @@ Project](https://www.portlandoregon.gov/parks/53181). The Tree Inventory
 Project has gathered data on Portland trees since 2010, collecting this
 data in the summer months with a team of over 1,300 volunteers and city
 employees. The streets trees were inventoried from 2010 to 2016, and the
-park trees that currently make up `pdxTrees_parks` and
-`ohsuTrees_parks`, were inventoried from 2017 to 2019. More information
-on the data can be found
+park trees that currently make up `pdxTrees_parks`, were inventoried
+from 2017 to 2019. More information on the data can be found
 [here](https://www.portlandoregon.gov/parks/article/501565).
 
 ``` r
 library(pdxTrees)
 library(tidyverse)
+
+# Grabing the data 
+
+pdxTrees_parks <- get_pdxTrees_parks()
 
 # Histogram of the inventory date 
 pdxTrees_parks %>%   
@@ -68,6 +67,39 @@ pdxTrees_parks %>%
 devtools::install_github("mcconvil/pdxTrees")
 ```
 
+## Update/Getting the data
+
+`pdxTrees` was updated in July of 2020 to contain two data loading
+functions, `get_pdxTrees_parks()` and `get_pdxTrees_streets` to pull the
+park and street tree data, respectivly, from the github repository.
+
+``` r
+# To get data on all parks 
+
+  pdxTrees_parks <- get_pdxTrees_parks()
+
+# To get data on one park 
+
+  berkeley_park <- get_pdxTrees_parks(park = "Berkeley Park")
+
+# Multiple parks 
+
+  parks <- get_pdxTrees_parks(park = c("Berkeley Park", "East Delta Park"))
+
+
+# The streets function works the same way but with neighborhoods! 
+
+  pdxTrees_streets <- get_pdxTrees_streets()
+
+# One neighborhood 
+  
+  concordia <- get_pdxTrees_streets(neighborhood = "Concordia")
+  
+# Mutliple neighborhoods! 
+  
+  neighborhoods <- get_pdxTrees_streets(neighborhood = c("Concordia", "Eastmoreland", "Sunnyside"))
+```
+
 ## Teaching with `pdxTrees`
 
 `pdxTrees` is used in multiple [Reed College statistics
@@ -80,10 +112,3 @@ course](https://github.com/Reed-Statistics/math241s20), the package is
 used to teach the best practices of function writing, to construction
 interactive maps with `leaflet`, and to showcase the usefulness of
 `lubridate` along with many other R packages.
-
-## Update
-
-`pdxTrees` was update on June 25th, 2020 to contain three data sets
-`pdxTrees_parks`, `pdxTrees_streets`, and `ohsuTrees_parks`. New park
-data from 2019 was added in addition to all of the street tree data.
-Enjoy\!
