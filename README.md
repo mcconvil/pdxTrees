@@ -30,6 +30,16 @@ park trees that currently make up `pdxTrees_parks`, were inventoried
 from 2017 to 2019. More information on the data can be found
 [here](https://www.portlandoregon.gov/parks/article/501565).
 
+    ## 
+    ##      checking for file ‘/private/var/folders/b7/vwwpfhms28n5_gnyv7c2yjmr0000gn/T/Rtmpf6MSL9/remotesd21558139802/mcconvil-pdxTrees-84c2d3c/DESCRIPTION’ ...  ✓  checking for file ‘/private/var/folders/b7/vwwpfhms28n5_gnyv7c2yjmr0000gn/T/Rtmpf6MSL9/remotesd21558139802/mcconvil-pdxTrees-84c2d3c/DESCRIPTION’
+    ##   ─  preparing ‘pdxTrees’:
+    ##      checking DESCRIPTION meta-information ...  ✓  checking DESCRIPTION meta-information
+    ##   ─  checking for LF line-endings in source and make files and shell scripts
+    ##   ─  checking for empty or unneeded directories
+    ##   ─  building ‘pdxTrees_0.2.0.tar.gz’
+    ##      
+    ## 
+
 ``` r
 library(pdxTrees)
 library(tidyverse)
@@ -67,11 +77,12 @@ pdxTrees_parks %>%
 devtools::install_github("mcconvil/pdxTrees")
 ```
 
-## Update/Getting the data
+  
+\#\# Update/Getting the data
 
 `pdxTrees` was updated in July of 2020 to contain two data loading
-functions, `get_pdxTrees_parks()` and `get_pdxTrees_streets` to pull the
-park and street tree data, respectivly, from the github repository.
+functions, `get_pdxTrees_parks()` and `get_pdxTrees_streets`, to pull
+the park and street tree data, respectivly, from the github repository.
 
 ``` r
 # To get data on all parks 

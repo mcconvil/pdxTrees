@@ -66,9 +66,11 @@ devtools::install_github("mcconvil/pdxTrees")
 ```
 
 
+\
 ## Update/Getting the data
 
 `pdxTrees` was updated in July of 2020 to contain two data loading functions, `get_pdxTrees_parks()` and `get_pdxTrees_streets`, to pull the park and street tree data, respectivly, from the github repository.
+
 
 ```{r, warning=FALSE, message=FALSE}
 # To get data on all parks 
