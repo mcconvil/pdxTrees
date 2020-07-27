@@ -34,6 +34,7 @@
 #' @source \url{https://www.portlandoregon.gov/parks/article/433143}
 #' @export get_pdxTrees_streets
 #' @importFrom rlang .data
+#' @importFrom magrittr %>%
 
 get_pdxTrees_streets <- function(neighborhood = NULL){
   

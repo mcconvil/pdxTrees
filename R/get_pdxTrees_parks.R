@@ -43,7 +43,8 @@
 #' }
 #' @source \url{https://www.portlandoregon.gov/parks/article/433143}
 #' @export get_pdxTrees_parks
-#' @importFrom rlang .data
+#' @importFrom rlang .data 
+#' @importFrom magrittr %>%
 
 
 get_pdxTrees_parks <- function(park = NULL){
