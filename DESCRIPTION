@@ -13,7 +13,11 @@ Authors@R:
      person("OR", 
             "City of Portland", 
             role = c("cph"), 
-            email = "Jeff.Ramsey@portlandoregon.gov"))
+            email = "Jeff.Ramsey@portlandoregon.gov"),
+    person("Nicholas",
+            "Horton",
+            role = c("ctb"),
+            email = "nhorton@amherst.edu"))
 Maintainer: Kelly McConville <mcconville@reed.edu>
 Description: This package contains datasets from Portland Parks and Recreation.  The city inventoried every tree in over 170 parks and along the streets in 96 neighborhoods. 
 Depends:

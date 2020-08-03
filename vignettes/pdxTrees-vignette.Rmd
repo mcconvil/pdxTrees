@@ -13,13 +13,22 @@ knitr::opts_chunk$set( echo = TRUE, message = FALSE, warning = FALSE, collapse =
                        fig.retina = 2)
 ```
 
-Here are some examples of the different ways `pdxTrees` can be used in the classroom setting! 
+
+`pdxTrees` is a data package composed of information on inventoried trees in Portland, OR. There are two datasets that can be accessed with this package:
+
+* `get_pdxTrees_parks()` pulls in data on up to 25,534 trees from 174 Portland parks.
+
+* `get_pdxTrees_streets()` pulls in data on up to 218,602 trees located on Portland's streets. A street tree is loosely defined as a tree generally in the public right-of-way, usually between the sidewalk and the street. 
+
+The street trees are categorized by one of the 96 Portland neighborhoods and the park trees are categorized by the public parks in which they grow. 
+
+Here are some examples of the different ways `pdxTrees` can be used in an educational setting!
 
  
 ```{r, include = TRUE, messgae = FALSE}
-# first make sure you have the package downloaded! 
+# First make sure you have the package downloaded! 
 
-  ## devtools::install_github("mcconvil/pdxTrees")
+# devtools::install_github("mcconvil/pdxTrees")
 
 # Loading the required libraries
 
@@ -28,11 +37,11 @@ library(tidyverse)
 
 ```
 
-First we have to grab the data! To do this we use the `get_pdxTrees_parks` and `get_pdxTrees_streets` functions. For theses examples we are only going to look at the park data. 
+First we have to grab the data. To do this we use the `get_pdxTrees_parks()` and `get_pdxTrees_streets()` functions. In this vignette, we only explore the parks dataset. 
 
 ```{R}
 
-# leaving the argument field blank pulls data for all of the parks! 
+# Leaving the argument field blank pulls data for all of the parks! 
 
 pdxTrees_parks <- get_pdxTrees_parks()
 
@@ -42,19 +51,19 @@ pdxTrees_parks <- get_pdxTrees_parks()
 
 ```{r, fig.width= 6, fig.height=4}
 
-# a histogram of the inventory date 
+# A histogram of the inventory date 
 pdxTrees_parks %>%   
   count(Inventory_Date) %>%  
-  # setting the aesthetics
+  # Setting the aesthetics
   ggplot(aes(x = Inventory_Date)) +   
-  # specifying a histogram and picking color! 
+  # Specifying a histogram and picking color! 
   geom_histogram(bins = 50,               
                  fill = "darkgreen", 
                  color = "black") + 
   labs( x = "Inventory Date", 
         y = "Count", 
         title= "When was pdxTrees_parks Inventoried?") + 
-  # adding a theme 
+  # Adding a theme 
   theme_minimal() + 
   theme(plot.title = element_text(hjust = 0.5))
 
@@ -62,47 +71,7 @@ pdxTrees_parks %>%
 
 Using `ggplot2` we can create a histogram of the `pdxTrees_parks` inventory dates. The trees were inventoried from 2017 to 2019 with the majority of the trees inventoried in the summer months, when the weather is nice in Portland. 
 
-This graph is just one of example of how `pdxTrees` can be used to create data visualizations. With a healthy mix of categorical and quantitative variables in both `pdxTrees_parks` and `pdxTrees_streets`, you can make scatterplots, bar graphs, density plots, etc. For more advanced visualizations, you can add animation with `gganimate` or create an interactive map with `leaflet`. 
-
-
-## A Linear Regression
-
-Aside from visualizations, the data can also be used to build linear regression models, create confidence intervals, and perform many other forms of statistical inference. 
-
-Let's look at the relationship between `Tree_Height` and `Pollution_Removal_value`.
-
-```{R linear regression graph, warning = FALSE, fig.width = 6, fig.height = 4}
-
-# visualizing the relationship between the two variables. 
-ggplot(pdxTrees_parks, aes(x = Tree_Height, 
-                           y = Pollution_Removal_value)) + 
- # creating a scatter plot 
-  geom_point(alpha = 0.05) + 
- # adding the line of best fit
-  stat_smooth(method = lm, se = FALSE) + 
-  theme_minimal() + 
-  labs(x = "Tree Height", 
-       y = "Pollution Removal Value ($)")
-
-```
-
-
-
-```{R linear regression, warning = FALSE}
-
-# moderndive is where the get_regression_table() function lives 
-library(moderndive)
-
-# running a linear regression of tree_height on stormwater_Ft
-mod <- lm(Pollution_Removal_value ~ Tree_Height, data = pdxTrees_parks)
-
-# Coefficients table
-get_regression_table(mod)
-```
-
-
-Looking at the graph and the slope coefficient from the regression table, it does seem like tree height positively correlates with pollution removal. In particular, with a $\hat\beta_1$ of $0.104$, we'd estimate that the `Pollution_Removal_value` increases by $0.104$ with each additional foot of `Tree_Height`.
-
+This graph is just one of example of how `pdxTrees` can be used to create data visualizations. With a healthy mix of categorical and quantitative variables in both datasets, you can make scatterplots, bar graphs, density plots, etc. For more advanced visualizations, you can add animation with `gganimate` or create an interactive map with `leaflet`. 
 
 ## An interactive map with `leaflet`
 
@@ -113,14 +82,14 @@ The following code creates an interactive map with `leaflet` and the `pdxTrees_p
 * Including a mini-map.
 
 ```{R leaflet packages}
-# loading the leaflet packages 
+# Loading the leaflet packages 
 library(leaflet)
 library(leaflet.extras)
 ```
 
 ```{r leaflet graph, fig.width= 8, fig.height=6}
 
-# making the leaf popup icon 
+# Making the leaf popup icon 
 greenLeaflittle <- makeIcon(
   iconUrl = "http://leafletjs.com/examples/custom-icons/leaf-green.png",
   iconWidth = 10, iconHeight = 20,
@@ -136,7 +105,7 @@ greenLeaflittle <- makeIcon(
 berkeley_prk <- get_pdxTrees_parks(park = "Berkeley Park")
 
 
-# creating the popup label 
+# Creating the popup label 
 
 labels <- paste("</b>", "Common Name:",
                  berkeley_prk$Common_Name,
@@ -144,19 +113,19 @@ labels <- paste("</b>", "Common Name:",
               berkeley_prk$Species_Factoid) 
 
 
-# creating the map 
+# Creating the map 
 
 leaflet() %>%
-  # setting the lng and lat to be in the general area of Berekely Park 
+  # Setting the lng and lat to be in the general area of Berekely Park 
  setView(lng = -122.6239, lat = 45.4726, zoom = 17) %>%  
-  # setting the background tiles
+  # Setting the background tiles
   addProviderTiles(providers$Esri.WorldTopoMap) %>%
-  # adding the leaf markers with the popup data on top of the circles markers 
+  # Adding the leaf markers with the popup data on top of the circles markers 
   addMarkers( ~Longitude, ~Latitude, 
               data = berkeley_prk,
              icon = greenLeaflittle,
               popup = ~labels) %>%
-  # adding the mini map at the bottom right corner 
+  # Adding the mini map at the bottom right corner 
   addMiniMap()
 
 ```
@@ -173,29 +142,29 @@ Before you animate a graph with `gganimate` you have to create and save a graph 
 
 ```{r animated graph}
 
-# refactoring the categorical mature_size variable 
+# Refactoring the categorical mature_size variable 
 berkeley_prk <- berkeley_prk %>%
  mutate(mature_size = fct_relevel(Mature_Size, "S", "M", "L"))
 
 
-# first creating the graph using ggplot and saving it! 
+# First creating the graph using ggplot and saving it! 
 berkeley_graph <- berkeley_prk %>%
-  # piping in the data 
+  # Piping in the data 
                   ggplot(aes(x = Tree_Height,
                               y = Pollution_Removal_value,
                               color = Mature_Size)) + 
-  # creating the scatterplot 
+  # Creating the scatterplot 
                   geom_point(size = 2, alpha = 0.5) +
                   theme_minimal() + 
-  # adding the labels 
+  # Adding the labels 
                   labs(title = "Pollution Removal Value of
                        Berkeley Park Trees",
                        x = "Tree Height", 
                        y = "Pollution Removal Value ($'s annually)", 
                        color = "Mature Size") + 
-  # adding a color palette 
+  # Adding a color palette 
                   scale_color_brewer(type = "seq", palette = "Set1") + 
-  # customizing the title font
+  # Customizing the title font
                   theme(plot.title = element_text(hjust = 0.5, 
                                                   size = 8,
                                                   face = "bold"), 
@@ -211,21 +180,59 @@ Now we can add animation!
 
 
 ```{R, out.width = "90%"}
-# then adding the animation with gganimate functions 
+# Then adding the animation with gganimate functions 
 
  berkeley_graph + 
-  # chosing which variable we want to annimate 
+  # Choosing which variable we want to annimate 
   transition_states(states = Mature_Size,
-                    #how long each point stays before fading away 
+                    # How long each point stays before fading away 
                     transition_length = 10,
-                    #the time the transition takes
+                    # Time the transition takes
                     state_length = 8)  +    
-  #annimation for the points entering
+  # Animation for the points entering
   enter_grow() +      
-  #annimation for the points exiting
+  # Animation for the points exiting
   exit_shrink()
 
 ```
 
 Unsurprisingly it seems that large trees have the highest degree of pollution removal.  However, there is a lot of overlap between the categories that could likely be explained by other key variables, like `Species`.  This is a great opportunity to practice multivariate thinking!
+
+## A Linear Regression
+
+Aside from visualizations, the data can also be used to build linear regression models, create confidence intervals, and perform many other forms of statistical inference. 
+
+Let's look at the relationship between `Tree_Height` and `Pollution_Removal_value`.
+
+```{R linear regression graph, warning = FALSE, fig.width = 6, fig.height = 4}
+
+# Visualizing the relationship between the two variables. 
+ggplot(pdxTrees_parks, aes(x = Tree_Height, 
+                           y = Pollution_Removal_value)) + 
+ # Creating a scatter plot 
+  geom_point(alpha = 0.05) + 
+ # Adding the line of best fit
+  stat_smooth(method = lm, se = FALSE) + 
+  theme_minimal() + 
+  labs(x = "Tree Height", 
+       y = "Pollution Removal Value ($)")
+
+```
+
+
+
+```{R linear regression, warning = FALSE}
+
+# moderndive is where the get_regression_table() function lives 
+library(moderndive)
+
+# Running a linear regression of Pollution_Removal_value on Tree_Height
+mod <- lm(Pollution_Removal_value ~ Tree_Height, data = pdxTrees_parks)
+
+# Printing the coefficients table
+get_regression_table(mod)
+```
+
+
+Looking at the graph and the slope coefficient from the regression table, it does seem like tree height positively correlates with pollution removal. In particular, with a $\hat\beta_1$ of $0.104$, we'd estimate that the `Pollution_Removal_value` increases by $0.104$ with each additional foot of `Tree_Height`.
 
