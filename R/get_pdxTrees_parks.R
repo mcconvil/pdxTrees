@@ -45,7 +45,14 @@
 #' @export get_pdxTrees_parks
 #' @importFrom rlang .data 
 #' @importFrom magrittr %>%
-
+#' 
+#' @examples  
+#' # To grab all trees
+#' get_pdxTrees_parks()
+#' # To grab trees from one park
+#' get_pdxTrees_parks(park = "Berkeley Park")
+#' # To grab trees from multiple parks
+#' get_pdxTrees_parks(park = c("Berkeley Park", "East Delta Park"))
 
 get_pdxTrees_parks <- function(park = NULL){
   

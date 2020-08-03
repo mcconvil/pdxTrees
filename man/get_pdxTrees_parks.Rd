@@ -54,3 +54,12 @@ Returns a data frame of 34 variables where each row is a tree:
 \description{
 This function pulls the pdxTrees_parks dataset from the GitHub repository: \url{https://github.com/mcconvil/pdxTrees}.  pdxTrees_parks is a data frame of all the trees in 174 parks in Portland, OR and was collected as part of the Urban Forestry Tree Inventory Project.
 }
+\examples{
+ 
+# To grab all trees
+get_pdxTrees_parks()
+# To grab trees from one park
+get_pdxTrees_parks(park = "Berkeley Park")
+# To grab trees from multiple parks
+get_pdxTrees_parks(park = c("Berkeley Park", "East Delta Park"))
+}
