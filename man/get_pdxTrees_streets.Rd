@@ -44,10 +44,12 @@ A data frame with 218602 rows and 23 variables:
 This function pulls the pdxTrees_streets dataset from the GitHub repository: \url{https://github.com/mcconvil/pdxTrees}. pdxTrees_streets is a data frame of all the street trees in the 96 neighborhoods of Portland, OR and was collected as part of the Urban Forestry Tree Inventory Project.
 }
 \examples{
+\donttest{
 # To grab all trees
 get_pdxTrees_streets()
 # To grab trees from one neighborhood
 get_pdxTrees_streets(neighborhood = "Concordia")
 # To grab trees from multiple neighborhoods 
 get_pdxTrees_streets(neighborhood = c("Concordia","Eastmoreland","Sunnyside"))
+}
 }
