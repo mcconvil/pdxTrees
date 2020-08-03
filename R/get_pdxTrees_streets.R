@@ -35,6 +35,15 @@
 #' @export get_pdxTrees_streets
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
+#' 
+#' @examples
+#' # To grab all trees
+#' get_pdxTrees_streets()
+#' # To grab trees from one neighborhood
+#' get_pdxTrees_streets(neighborhood = "Concordia")
+#' # To grab trees from multiple neighborhoods 
+#' get_pdxTrees_streets(neighborhood = c("Concordia","Eastmoreland","Sunnyside"))
+
 
 get_pdxTrees_streets <- function(neighborhood = NULL){
   
