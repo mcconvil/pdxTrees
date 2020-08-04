@@ -38,11 +38,10 @@ Suggests:
     readr, 
     utils, 
     gifski,
-    tidyverse
+    ggplot2,
+    forcats
 VignetteBuilder: knitr
 Imports: 
     magrittr,
     rlang, 
     dplyr
-   
-   
