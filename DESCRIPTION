@@ -36,12 +36,14 @@ Suggests:
     infer, 
     moderndive, 
     readr, 
-    dplyr, 
     utils, 
-    gifski
+    gifski,
+    tidyverse,
+    utf8
 VignetteBuilder: knitr
 Imports: 
     magrittr,
     rlang, 
-    tidyverse
+    dplyr
+   
    

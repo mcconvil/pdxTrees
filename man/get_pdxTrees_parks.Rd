@@ -30,7 +30,7 @@ Returns a data frame of 34 variables where each row is a tree:
   \item{Scientific_Name}{Scientific name of the tree}
   \item{Family}{Family of the tree}
   \item{Genus}{Genus of the tree}
-  \item{Functional_Type}{Categorial variable with groups: Broadleaf Deciduous (BD), Broadleaf Evergreen (BE), Coniferous Deciduous (CD), and Coniferous Evergreen (CE)}
+  \item{Functional_Type}{Categorical variable with groups: Broadleaf Deciduous (BD), Broadleaf Evergreen (BE), Coniferous Deciduous (CD), and Coniferous Evergreen (CE)}
   \item{Mature_Size}{Categorical variable with groups: Large (L), Medium (M), and Small (S).  Categorization is based on  the height, canopy width, and general form of the tree at maturity}
   \item{Native}{Whether or not the tree is native}
   \item{Edible}{Categorical variable of edible trees}
@@ -57,9 +57,12 @@ This function pulls the pdxTrees_parks dataset from the GitHub repository: \url{
 \examples{
  
 # To grab all trees
-get_pdxTrees_parks()
+\donttest{ get_pdxTrees_parks()} 
+
 # To grab trees from one park
-get_pdxTrees_parks(park = "Berkeley Park")
+\donttest{get_pdxTrees_parks(park = "Berkeley Park")}
+
 # To grab trees from multiple parks
-get_pdxTrees_parks(park = c("Berkeley Park", "East Delta Park"))
+\donttest{get_pdxTrees_parks(park = c("Berkeley Park", "East Delta Park"))}
+ 
 }

@@ -32,19 +32,21 @@
 #'   \item{Latitude}{Latitude}
 #' }
 #' @source \url{https://www.portlandoregon.gov/parks/article/433143}
-#' @export get_pdxTrees_streets
+#' 
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
 #' 
 #' @examples
-#' \donttest{
-#' # To grab all trees
-#' get_pdxTrees_streets()
+#'  # To grab all trees
+#' \donttest{get_pdxTrees_streets()} 
+#' 
 #' # To grab trees from one neighborhood
-#' get_pdxTrees_streets(neighborhood = "Concordia")
+#' \donttest{get_pdxTrees_streets(neighborhood = "Concordia")}
+#' 
 #' # To grab trees from multiple neighborhoods 
-#' get_pdxTrees_streets(neighborhood = c("Concordia","Eastmoreland","Sunnyside"))
-#' }
+#' \donttest{get_pdxTrees_streets(neighborhood = c("Concordia","Eastmoreland","Sunnyside")) } 
+#' 
+#' @export get_pdxTrees_streets
 
 
 get_pdxTrees_streets <- function(neighborhood = NULL){

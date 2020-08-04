@@ -41,18 +41,22 @@
 #'   \item{Longitude}{Longitude}
 #'   \item{Latitude}{Latitude}
 #' }
+#' 
 #' @source \url{https://www.portlandoregon.gov/parks/article/433143}
-#' @export get_pdxTrees_parks
 #' @importFrom rlang .data 
 #' @importFrom magrittr %>%
 #' 
-#' @examples  
+#'@examples  
 #' # To grab all trees
-#' get_pdxTrees_parks()
+#' \donttest{ get_pdxTrees_parks()} 
+#' 
 #' # To grab trees from one park
-#' get_pdxTrees_parks(park = "Berkeley Park")
+#' \donttest{get_pdxTrees_parks(park = "Berkeley Park")}
+#' 
 #' # To grab trees from multiple parks
-#' get_pdxTrees_parks(park = c("Berkeley Park", "East Delta Park"))
+#' \donttest{get_pdxTrees_parks(park = c("Berkeley Park", "East Delta Park"))}
+#'  
+#' @export get_pdxTrees_parks
 
 get_pdxTrees_parks <- function(park = NULL){
   
@@ -116,5 +120,7 @@ get_pdxTrees_parks <- function(park = NULL){
         dplyr::filter(.data$Park %in% park) %>%
       return()
       } 
-    
-} 
+}
+
+
+
