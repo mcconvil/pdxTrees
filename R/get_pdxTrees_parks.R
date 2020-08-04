@@ -21,7 +21,7 @@
 #'   \item{Scientific_Name}{Scientific name of the tree}
 #'   \item{Family}{Family of the tree}
 #'   \item{Genus}{Genus of the tree}
-#'   \item{Functional_Type}{Categorial variable with groups: Broadleaf Deciduous (BD), Broadleaf Evergreen (BE), Coniferous Deciduous (CD), and Coniferous Evergreen (CE)}
+#'   \item{Functional_Type}{Categorical variable with groups: Broadleaf Deciduous (BD), Broadleaf Evergreen (BE), Coniferous Deciduous (CD), and Coniferous Evergreen (CE)}
 #'   \item{Mature_Size}{Categorical variable with groups: Large (L), Medium (M), and Small (S).  Categorization is based on  the height, canopy width, and general form of the tree at maturity}
 #'   \item{Native}{Whether or not the tree is native}
 #'   \item{Edible}{Categorical variable of edible trees}
