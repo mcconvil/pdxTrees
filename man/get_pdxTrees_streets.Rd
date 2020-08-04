@@ -13,7 +13,7 @@ get_pdxTrees_streets(neighborhood = NULL)
 \item{neighborhood}{A vector of neighborhood names for filtering the data.  If NULL, all street trees will be returned.}
 }
 \value{
-A data frame with 218602 rows and 23 variables:
+Returns a data frame with 218602 rows and 23 variables:
 \describe{
   \item{UserID}{ID}
   \item{Inventory_Date}{Date of data collection}
@@ -51,6 +51,6 @@ This function pulls the pdxTrees_streets dataset from the GitHub repository: \ur
 \donttest{get_pdxTrees_streets(neighborhood = "Concordia")}
 
 # To grab trees from multiple neighborhoods 
-\donttest{get_pdxTrees_streets(neighborhood = c("Concordia","Eastmoreland","Sunnyside")) } 
+\donttest{get_pdxTrees_streets(neighborhood = c("Concordia","Eastmoreland","Sunnyside"))} 
 
 }

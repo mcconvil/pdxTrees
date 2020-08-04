@@ -56,7 +56,7 @@
 #' # To grab trees from multiple parks
 #' \donttest{get_pdxTrees_parks(park = c("Berkeley Park", "East Delta Park"))}
 #'  
-#' @export get_pdxTrees_parks
+#' @export
 
 get_pdxTrees_parks <- function(park = NULL){
   

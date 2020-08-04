@@ -38,8 +38,7 @@ Suggests:
     readr, 
     utils, 
     gifski,
-    tidyverse,
-    utf8
+    tidyverse
 VignetteBuilder: knitr
 Imports: 
     magrittr,

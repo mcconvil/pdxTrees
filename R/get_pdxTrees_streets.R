@@ -2,10 +2,9 @@
 #' 
 #' @description This function pulls the pdxTrees_streets dataset from the GitHub repository: \url{https://github.com/mcconvil/pdxTrees}. pdxTrees_streets is a data frame of all the street trees in the 96 neighborhoods of Portland, OR and was collected as part of the Urban Forestry Tree Inventory Project.
 #' 
-#' 
 #' @param neighborhood A vector of neighborhood names for filtering the data.  If NULL, all street trees will be returned.
 #' 
-#' @return A data frame with 218602 rows and 23 variables:
+#' @return Returns a data frame with 218602 rows and 23 variables:
 #' \describe{
 #'   \item{UserID}{ID}
 #'   \item{Inventory_Date}{Date of data collection}
@@ -31,6 +30,7 @@
 #'   \item{Longitude}{Longitude}
 #'   \item{Latitude}{Latitude}
 #' }
+#' 
 #' @source \url{https://www.portlandoregon.gov/parks/article/433143}
 #' 
 #' @importFrom rlang .data
@@ -44,9 +44,9 @@
 #' \donttest{get_pdxTrees_streets(neighborhood = "Concordia")}
 #' 
 #' # To grab trees from multiple neighborhoods 
-#' \donttest{get_pdxTrees_streets(neighborhood = c("Concordia","Eastmoreland","Sunnyside")) } 
+#' \donttest{get_pdxTrees_streets(neighborhood = c("Concordia","Eastmoreland","Sunnyside"))} 
 #' 
-#' @export get_pdxTrees_streets
+#' @export
 
 
 get_pdxTrees_streets <- function(neighborhood = NULL){
@@ -100,5 +100,6 @@ get_pdxTrees_streets <- function(neighborhood = NULL){
         return()} 
   
 }
+
 
 
