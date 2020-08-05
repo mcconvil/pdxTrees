@@ -6,8 +6,8 @@ data-raw
 ^\.github$
 ^\.github/workflows/R-CMD-check\.yml$
 ^\.github/workflows/Render_readme\.yml$
-README_files
 README.Rmd
+README_files
 pdxTrees_parks.csv
 pdxTrees_streets.csv
 cran-comments.md
