@@ -26,6 +26,7 @@ License: GPL-3
 Encoding:UTF-8
 LazyData: true
 URL: https://github.com/mcconvil/pdxTrees
+BugReports: https://github.com/mcconvil/pdxTrees/issues
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,
@@ -45,4 +46,5 @@ Imports:
     magrittr,
     rlang, 
     dplyr
-    
+
+
