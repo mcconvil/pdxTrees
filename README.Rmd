@@ -22,36 +22,6 @@ The street trees are categorized by one of the 96 Portland neighborhoods and the
 
 These data were collected by the [Portland Parks and Recreation's Urban Forestry Tree Inventory Project](https://www.portlandoregon.gov/parks/53181). The Tree Inventory Project has gathered data on Portland trees since 2010, collecting this data in the summer months with a team of over 1,300 volunteers and city employees. The streets trees were inventoried from 2010 to 2016, and the park trees were inventoried from 2017 to 2019. More information on the data can be found [here](https://www.portlandoregon.gov/parks/article/501565).
 
-```{r, echo= FALSE, warning = FALSE, message=FALSE, include = FALSE}
-devtools::install_github("mcconvil/pdxTrees")
-```
-
-```{r, warning = FALSE, message = FALSE, retina = 2}
-library(pdxTrees)
-library(tidyverse)
-
-# Grabbing the data 
-
-pdxTrees_parks <- get_pdxTrees_parks()
-
-# Histogram of the inventory date 
-
-pdxTrees_parks %>%   
-  count(Inventory_Date) %>%  
-  # Setting the aesthetics
-  ggplot(aes(x = Inventory_Date)) +   
-  # Specifying a histogram and picking color! 
-  geom_histogram(bins = 50,               
-                 fill = "darkgreen", 
-                 color = "black") + 
-  labs( x = "Inventory Date", 
-        y = "Count", 
-        title= " When was pdxTrees_parks Inventoried?") + 
-  # Adjusting the theme 
-  theme_minimal() + 
-  theme(plot.title = element_text(hjust = 0.5))
-
-```
 
 
 
@@ -73,6 +43,9 @@ devtools::install_github("mcconvil/pdxTrees")
 
 
 ```{r, warning=FALSE, message=FALSE}
+# Load the library
+library(pdxTrees)
+
 # To get data on all parks 
 
 pdxTrees_parks <- get_pdxTrees_parks()

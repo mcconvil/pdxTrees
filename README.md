@@ -31,34 +31,6 @@ park trees were inventoried from 2017 to 2019. More information on the
 data can be found
 [here](https://www.portlandoregon.gov/parks/article/501565).
 
-``` r
-library(pdxTrees)
-library(tidyverse)
-
-# Grabbing the data 
-
-pdxTrees_parks <- get_pdxTrees_parks()
-
-# Histogram of the inventory date 
-
-pdxTrees_parks %>%   
-  count(Inventory_Date) %>%  
-  # Setting the aesthetics
-  ggplot(aes(x = Inventory_Date)) +   
-  # Specifying a histogram and picking color! 
-  geom_histogram(bins = 50,               
-                 fill = "darkgreen", 
-                 color = "black") + 
-  labs( x = "Inventory Date", 
-        y = "Count", 
-        title= " When was pdxTrees_parks Inventoried?") + 
-  # Adjusting the theme 
-  theme_minimal() + 
-  theme(plot.title = element_text(hjust = 0.5))
-```
-
-![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
-
 ## To install the package
 
 ``` r
@@ -76,6 +48,9 @@ functions, `get_pdxTrees_parks()` and `get_pdxTrees_streets()`, to pull
 the park and street tree data, respectively, from the Github repository.
 
 ``` r
+# Load the library
+library(pdxTrees)
+
 # To get data on all parks 
 
 pdxTrees_parks <- get_pdxTrees_parks()
