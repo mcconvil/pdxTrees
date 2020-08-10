@@ -19,7 +19,7 @@ Authors@R:
             role = c("ctb"),
             email = "nhorton@amherst.edu"))
 Maintainer: Kelly McConville <mcconville@reed.edu>
-Description: An engaging collection of datasets from Portland Parks and Recreation. The city inventoried every tree in over 170 parks and along the streets in 96 neighborhoods. 
+Description: An engaging collection of datasets from Portland Parks and Recreation. The city of Portland inventoried every tree in over 170 parks and along the streets in 96 neighborhoods. 
 Depends:
     R (>= 3.1)
 License: GPL-3
