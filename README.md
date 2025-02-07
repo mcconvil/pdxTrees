@@ -1,8 +1,4 @@
 
-![R-CMD-check](https://github.com/mcconvil/pdxTrees/workflows/R-CMD-check/badge.svg)
-![Render
-README](https://github.com/mcconvil/pdxTrees/workflows/Render%20README/badge.svg)
-
 # pdxTrees
 
 `pdxTrees` is a data package composed of information on inventoried
