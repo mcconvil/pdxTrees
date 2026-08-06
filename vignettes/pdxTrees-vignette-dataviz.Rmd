@@ -466,7 +466,7 @@ The following:
 * Plots both graphs
 ```{r}
 #cleaning
-streets_2026 <- get_pdxTrees_streets() %>%
+streets_2026 <- get_pdxTrees_streets(version = "2026") %>%
    select(Common_Name, Condition)
 
 Streets_2026_cleaned <- streets_2026 %>% 
@@ -480,15 +480,17 @@ Streets_2019_cleaned <- streets_2019 %>%
 
 #plotting
 
-ggplot(data = Streets_2019_cleaned, mapping = aes(x = Common_Name)) +
+ggplot(data = Streets_2019_cleaned, mapping = aes(x = Common_Name, fill = Common_Name)) +
   geom_bar() +
   facet_wrap(~Condition) +
-  labs(title = "Ash Tree Counts per Condition 2019")
+  labs(title = "Ash Tree Counts per Condition 2019") +
+  scale_fill_brewer(palette = "Dark2")
   
-ggplot(data = Streets_2026_cleaned, mapping = aes(x = Common_Name)) +
+ggplot(data = Streets_2026_cleaned, mapping = aes(x = Common_Name, fill = Common_Name)) +
     geom_bar() +
   facet_wrap(~Condition) +
-  labs(title = "Ash Tree Counts per Condition 2026")
+  labs(title = "Ash Tree Counts per Condition 2026") +
+  scale_fill_brewer(palette = "Dark2")
 ```
 
 
