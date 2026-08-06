@@ -69,8 +69,8 @@
 #' }
 #' 
 #' @source \url{https://www.portland.gov/trees/get-involved/tree-inventory#toc-street-tree-inventory}
-#' @source \url{https://gis-pdx.opendata.arcgis.com/datasets/15ae00ece1bf486a868c0f635d3acbfa_220/explore?location=45.550700%2C-122.632400%2C11&showTable=true}
-#' @source \url{https://gis-pdx.opendata.arcgis.com/datasets/parks/explore?location=45.541200%2C-122.601300%2C11&showTable=true}
+#' @source \url{https://gis-pdx.opendata.arcgis.com/datasets/15ae00ece1bf486a868c0f635d3acbfa_220/explore?location=45.550700\%2C-122.632400\%2C11&showTable=true}
+#' @source \url{https://gis-pdx.opendata.arcgis.com/datasets/parks/explore?location=45.541200\%2C-122.601300\%2C11&showTable=true}
 #' 
 #' @importFrom rlang .data 
 #' @importFrom magrittr %>%
@@ -130,7 +130,7 @@ get_pdxTrees_parks <- function(park = NULL, version = "2019"){
   #matching version 
   version <- match.arg(version, choices = c("2019", "2026"))
   
-  if (version == 2019) {
+  if (version == "2019") {
   # grabbing the data from github
   dat <- readr::read_csv("https://raw.githubusercontent.com/mcconvil/pdxTrees/master/pdxTrees_parks.csv",
                          col_types = systems_cols)
@@ -154,26 +154,26 @@ get_pdxTrees_parks <- function(park = NULL, version = "2019"){
       return()
   } }
   
-  if (version == 2026) {
+  if (version == "2026") {
     # grabbing the data from github
-    dat <- readr::read_csv("https://github.com/ufds-lab/pdxTrees-package/blob/master/data/Park_Trees_2026.csv",
+    dat3 <- readr::read_csv("https://github.com/ufds-lab/pdxTrees-package/blob/master/data/Park_Trees_2026.csv",
                            col_types = systems_cols)
     # returning the data
     if(is.null(park)){
-      return(dat)}
+      return(dat3)}
     
     if(!is.null(park)){
       
       # error message if all parks provided are not
       # in dat$Park
-      if(sum(park %in% unique(dat$Park)) == 0) { 
+      if(sum(park %in% unique(dat3$Park)) == 0) { 
         
         stop('Unfortunately the park(s) you listed is(are) not one of the following parks:',
-             print(paste(unique(dat$Park), collapse = ", ")))  
+             print(paste(unique(dat3$Park), collapse = ", ")))  
       }
       
       
-      dat %>%
+      dat3 %>%
         dplyr::filter(.data$Park %in% park) %>%
         return()
     } } 

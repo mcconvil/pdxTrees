@@ -27,7 +27,6 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/mcconvil/pdxTrees
 BugReports: https://github.com/mcconvil/pdxTrees/issues
-RoxygenNote: 7.3.3
 Suggests: 
     knitr,
     rmarkdown, 
@@ -46,3 +45,4 @@ Imports:
     magrittr,
     rlang, 
     dplyr
+Config/roxygen2/version: 8.0.0
