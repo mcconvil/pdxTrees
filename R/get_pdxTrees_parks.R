@@ -2,7 +2,7 @@
 #' 
 #' @description This function pulls the pdxTrees_parks dataset from the GitHub repository:
 #'  \url{https://github.com/mcconvil/pdxTrees}. 
-#'  pdxTrees_parks is a data frame of all the trees in 174 parks in Portland, OR
+#'  pdxTrees_parks is a data frame of all the trees in 174 parks (in the version = "2019" data set) or 316 parks (in the version = "2026" data set) in Portland, OR
 #'  and was collected as part of the Urban Forestry Tree Inventory Project.
 #'
 #' @param park A vector of park names for filtering the data.
@@ -69,6 +69,9 @@
 #' }
 #' 
 #' @source \url{https://www.portland.gov/trees/get-involved/tree-inventory#toc-street-tree-inventory}
+#' @source \url{https://gis-pdx.opendata.arcgis.com/datasets/15ae00ece1bf486a868c0f635d3acbfa_220/explore?location=45.550700%2C-122.632400%2C11&showTable=true}
+#' @source \url{https://gis-pdx.opendata.arcgis.com/datasets/parks/explore?location=45.541200%2C-122.601300%2C11&showTable=true}
+#' 
 #' @importFrom rlang .data 
 #' @importFrom magrittr %>%
 #' 
@@ -84,7 +87,7 @@
 #'  
 #' @export
 
-get_pdxTrees_parks <- function(park = NULL){
+get_pdxTrees_parks <- function(park = NULL, version = "2019"){
   
   # specify column types
   systems_cols <- readr::cols(
@@ -122,11 +125,15 @@ get_pdxTrees_parks <- function(park = NULL){
     `Total_Annual_Services` = readr::col_double(),
     `Origin` = readr::col_character(),
     `Species_Factoid` = readr::col_character()
-    ) 
+  ) 
   
+  #matching version 
+  version <- match.arg(version, choices = c("2019", "2026"))
+  
+  if (version == 2019) {
   # grabbing the data from github
   dat <- readr::read_csv("https://raw.githubusercontent.com/mcconvil/pdxTrees/master/pdxTrees_parks.csv",
-                        col_types = systems_cols)
+                         col_types = systems_cols)
   # returning the data
   if(is.null(park)){
     return(dat)}
@@ -135,18 +142,39 @@ get_pdxTrees_parks <- function(park = NULL){
     
     # error message if all parks provided are not
     # in dat$Park
+    if(sum(park %in% unique(dat$Park)) == 0) { 
+      
+      stop('Unfortunately the park(s) you listed is(are) not one of the following parks:',
+           print(paste(unique(dat$Park), collapse = ", ")))  
+    }
+    
+    
+    dat %>%
+      dplyr::filter(.data$Park %in% park) %>%
+      return()
+  } }
+  
+  if (version == 2026) {
+    # grabbing the data from github
+    dat <- readr::read_csv("https://github.com/ufds-lab/pdxTrees-package/blob/master/data/Park_Trees_2026.csv",
+                           col_types = systems_cols)
+    # returning the data
+    if(is.null(park)){
+      return(dat)}
+    
+    if(!is.null(park)){
+      
+      # error message if all parks provided are not
+      # in dat$Park
       if(sum(park %in% unique(dat$Park)) == 0) { 
         
         stop('Unfortunately the park(s) you listed is(are) not one of the following parks:',
              print(paste(unique(dat$Park), collapse = ", ")))  
       }
-  
+      
       
       dat %>%
         dplyr::filter(.data$Park %in% park) %>%
-      return()
-      } 
+        return()
+    } } 
 }
-
-
-
