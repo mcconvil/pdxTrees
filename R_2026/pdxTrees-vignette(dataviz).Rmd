@@ -1,0 +1,561 @@
+---
+title: "Data Visulization with pdxTrees"
+output: rmarkdown::html_vignette 
+
+
+vignette: >
+  %\VignetteIndexEntry{Data Visulization with pdxTrees}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set( echo = TRUE, message = FALSE, warning = FALSE, collapse = TRUE, comment = "#>",  fig.align = "center",
+                       fig.retina = 2)
+```
+
+
+`pdxTrees` is a data package composed of information on inventoried trees in Portland, OR. There are two datasets that can be accessed with this package:
+
+* `get_pdxTrees_parks(version = "2019")` pulls in data on up to 25,534 trees from 174 Portland parks.
+* `get_pdxTrees_parks(version = "2026")` pulls in data on up to 25,734 trees from 316 Portland parks.
+
+* `get_pdxTrees_streets(version = "2019")` pulls in data on up to 218,602 trees located on Portland's streets. A street tree is loosely defined as a tree generally in the public right-of-way, usually between the sidewalk and the street. 
+*`get_pdxTrees_streets(version = "2026)` pulls in data on up to 252,180 trees located on Portland's streets. A street tree is loosely defined as a tree generally in the public right-of-way, usually between the sidewalk and the street. 
+
+The street trees are categorized by one of the 95 Portland neighborhoods and the park trees are categorized by the public parks in which they grow. 
+
+Here are some examples of the different ways `pdxTrees` can be used in an educational setting to learn data visualization!
+
+ 
+```{r, include = TRUE, messgae = FALSE}
+
+# First make sure you have the package downloaded! 
+
+devtools::install_github("mcconvil/pdxTrees")
+
+# Loading the required libraries
+
+library(pdxTrees)
+library(dplyr)
+library(forcats)
+library(devtools)
+library(tidyverse)
+library(ggalluvial)
+library(leaflet)
+library(leaflet.extras)
+```
+## Load data into environment using a package function
+
+```{r}
+PDX_parks <- get_pdxTrees_parks()
+PDX_streets <- get_pdxTrees_streets()
+```
+
+# Create a histogram to explore Portland park tree heights
+
+The following:
+* Uses the data that was loaded using a package function
+* Makes a colored histogram to display tree heights
+* Makes 30 bins for data
+
+```{r}
+#plotting
+
+ggplot(data = PDX_parks,
+ mapping = aes(x = Tree_Height)) +
+ geom_histogram(color = "white",
+ fill = "forestgreen",
+ bins = 30) +
+  labs(title = "Distribution of Tree Heights in Portland Parks")
+
+```
+# Create a histogram to explore Portland street tree DBH
+
+The following:
+
+* Uses the data that was loaded using a package function
+* Makes a colored histogram to display tree DBH on Portland Streets
+* Makes 45 bins for data
+
+```{r}
+#plotting
+
+ggplot(data = PDX_streets,
+ mapping = aes(x = DBH)) +
+ geom_histogram(color = "white",
+ fill = "green3",
+ bins = 45) +
+  labs(title = "Distribution of Tree DBH in Portland Streets")
+```
+
+# Is DBH associated with condition in street trees?
+
+The following:
+* Factors in order to list condition in a desired order
+* Adds labels
+* Utilizes geom_violin
+
+
+```{r}
+#plotting
+
+ggplot(
+  data = PDX_streets,
+  mapping = aes(
+    x = factor(Condition, levels = c("Dead", "Poor", "Fair", "Good")),
+    y = DBH,
+    fill = factor(Condition, levels = c("Dead", "Poor", "Fair", "Good"))
+  )
+) +
+  geom_violin() +
+  scale_fill_brewer() +
+    labs(x = "Condition", fill = "Condition", title = "DBH with each Tree Condition Level")
+```
+
+# Explor DBH and carbon storage value in Portland parks
+
+The following:
+* Creates a data frame of cleaned data containing Carbon_Storage_value and DBH, also removing NA values
+* Uses geom_jitter to plot DBH against Carbon Storage Values
+* Uses geom_smooth to identify trends
+
+
+```{r}
+#cleaning
+
+Carbonstorage_DBH <- PDX_parks %>%
+  select(Carbon_Storage_value, DBH) %>%
+  drop_na()
+
+#plotting
+
+ggplot(data = Carbonstorage_DBH, mapping = aes(x = Carbon_Storage_value, y = DBH)) +
+  geom_jitter(alpha = 0.3) +
+  geom_smooth() +
+  labs(title = "DBH and Carbon Storage Value")
+```
+# Does site width correlate with DBH for Hophornbeam on Portland streets?
+
+The following:
+
+* Creates a data frame using select() and filter() to subset desired data
+* Generates a line graph to display that DBH and site width don't increase together
+```{r}
+#cleaning
+street_hophorn <- PDX_streets %>%
+  select(Common_Name, DBH, Site_Width) %>%
+  filter(Common_Name %in% "Hophornbeam") %>%
+  drop_na()
+
+#plotting
+ggplot( data = street_hophorn, mapping = aes(x = Site_Width, y = DBH)) +
+  geom_line(color = "darkseagreen") +
+  labs(title = "Hophornbeam DBH and Site Width Relationship" )
+```
+
+
+# Carbon storage of Portland park trees considering various sizes
+
+The following: 
+
+* Cleans creates a data frame containing the data which includes variables of interest, including Carbon_Storage_value and Mature_Size
+* Plots the data using geom_density
+
+
+```{r}
+#cleaning
+
+parks_density <- PDX_parks %>%
+  drop_na(Carbon_Storage_value, Mature_Size)
+
+#plotting
+
+ggplot(data =  parks_density, mapping = aes(x = Carbon_Storage_value, fill = Mature_Size)) +
+  geom_density() +
+  labs( title = "Carbon Storage of Various Tree Sizes")
+```
+
+# Did staff or volunteers collect more data in Parks?
+
+This graph observes data on who collected data in Portland parks to see which 
+group collected more data.
+
+The following:
+
+* Removes NA values in the data that counts who collected the Park tree data
+* Uses a bar graph with different colors to compare volunteer and staff 
+collection rates
+
+```{r}
+#cleaning
+
+no_na_parks <- PDX_parks %>%
+  drop_na(Collected_By)
+
+#plotting
+
+ggplot( data = no_na_parks, mapping = aes(x = Collected_By, fill = Collected_By)) +
+  geom_bar(color = "black") +
+  theme_bw() +
+  scale_fill_manual(values = c("darkgoldenrod4","darkcyan")) +
+  labs(title = "Staff vs. Volunteer Collection in Portland Parks")
+```
+
+
+# Did staff or volunteers collect more data on Streets?
+
+The following:
+
+* Removes NA values in the data that counts who collected the street tree data
+* Uses a bar graph with different colors to compare volunteer and staff 
+collection rates
+
+```{r}
+#cleaning
+
+no_na_streets <- PDX_streets %>%
+  drop_na(Collected_By)
+
+#plotting
+
+ggplot( data = no_na_streets, mapping = aes(x = Collected_By, fill = Collected_By)) +
+  geom_bar(color = "black") +
+  theme_bw() +
+  scale_fill_manual(values = c("darkkhaki","azure1")) +
+   labs(title = "Staff vs. Volunteer Collection on Portland Streets")
+```
+# How many of these species of interest are there in Portland parks?
+
+The following:
+
+* Makes a data frame to select and filter to data of interest
+* Makes counts for tree species of interest
+* Plots using geom_col() with a color palette
+```{r}
+tree_species_count <- PDX_parks %>%
+   select("Common_Name") %>%
+  filter(Common_Name %in% c("Douglas-Fir",
+                             "Giant Sequoia",
+                             "Sweetgum")) 
+ 
+
+counts_spe <- count(tree_species_count, Common_Name)
+
+ggplot(data = counts_spe, mapping = aes(x = Common_Name, y=n, fill = Common_Name)) +
+  geom_col() +
+  scale_fill_brewer(palette = "PuBuGn") +
+  labs(title = "Douglas Fir, Giant Sequioa, and Sweetgum Presence in Portland Parks")
+```
+
+
+# Do trees in better conditions sequester more carbon?
+
+The following:
+
+* Creates a data frame containing condition and wires from Portland Streets
+* Uses count() to make a data frame that counts condition and wires
+* Plots the information using geom_alluvium
+
+
+```{r}
+#cleaning
+
+condition_wires <- get_pdxTrees_streets() %>%
+    select("Wires", "Condition")
+
+#counting
+
+counts_wire_con <- count(condition_wires, Condition, Wires)
+
+#plotting
+
+ggplot(data = counts_wire_con,
+       mapping = aes( axis1 = Condition, axis2 = Wires, y = n)) +
+  geom_alluvium(mapping = aes(fill = Condition)) +
+  geom_stratum() +
+  geom_text(stat = "stratum", 
+            mapping = aes(label = after_stat(stratum))) +
+  scale_x_discrete(limits = c("Condition", "Wires")) +
+  labs(title = "Wires Effect on Tree Condition")
+```
+
+
+# Create a bar graph comparing native and nonnative trees in Portland parks
+
+This bar graph compares native tree species count to nonnative tree species count in Portland parks.
+
+The following:
+* Removes NA values in the data that counts native and nonnative trees
+* Makes a bar graph comparing native and nonnative tree counts
+* Uses a color palette to differentiate
+
+```{r}
+#cleaning
+
+native_parktrees <- PDX_parks %>%
+  drop_na(Native) 
+
+#plotting
+
+ggplot(data = native_parktrees,
+ mapping = aes(x = Native, fill = Native)) +
+ geom_bar(color = "black") +
+  theme_bw() +
+  labs( title = "Native vs Nonnative Tree Count in Portland Parks",
+        y = "Number of Trees") +
+  scale_fill_manual(values = c("red3","lightgreen"))
+```
+
+
+# Using geom_alluvium to see the condition of Ash/Mountain Ash trees in 2026 Portland streets
+
+The following:
+* Filters to two types of ash trees from the streets dataset from 2026
+* Selects species and condition
+* Creates a data frame with count to analyze common observations (provides "n" column)
+* Makes a geom_alluvium to analyze the condition of ash trees on Portland streets
+* Uses geom_stratum to draw rectangular blocks on each axis
+* Renames the axes
+
+```{r}
+
+#cleaning
+ash_trees_condition <- get_pdxTrees_streets(version = "2026") %>%
+  filter(Common_Name %in% c("Mountain-Ash", 
+                            "Ash")) %>%
+  select("Common_Name", "Condition")
+
+#counting
+
+counts <- count(ash_trees_condition, Common_Name, Condition)
+
+#plotting
+
+ggplot(data = counts, mapping = aes( axis1 = Common_Name, axis2 = Condition, y = n)) +
+  geom_alluvium(mapping = aes(fill = Common_Name)) +
+  geom_stratum() +
+  geom_text(stat = "stratum", mapping = aes(label = after_stat(stratum))) +
+  scale_x_discrete(limits = c("Species", "Condition")) +
+  labs(title = "Condition of Ash Trees on Portland Streets in 2026")
+```
+# Comparing street tree diameters based on family
+
+The following:
+
+* Creates a data frame that selects and filters data of interest
+* Uses a violin plot to compare DBH based on Tree Families
+```{r}
+#cleaning
+
+street_family_eval <- PDX_streets %>%
+  select(Family, DBH) %>%
+   filter(Family %in% c("Fagaceae",
+                             "Sapindaceae",
+                             "Rosaceae"))
+
+#plotting
+
+ggplot( data = street_family_eval,
+        mapping = aes(x = Family,
+                      y = DBH,
+                      fill = Family)) +
+  geom_violin() +
+  labs(title = "Tree Family Differences in DBH")
+```
+
+
+# Comparing park tree diameters based on species
+
+The following:
+* Creates a data frame that subsets down to species of interest and DBH
+* Makes a boxplot comparing the DBH of different species of street trees
+* Uses a color palette
+
+
+```{r}
+#cleaning
+
+Parks_species_eval <- PDX_parks %>%
+  select(Common_Name, DBH, Park) %>%
+   filter(Common_Name %in% c("Douglas-Fir",
+                             "Giant Sequoia",
+                             "Sweetgum"), 
+    Park %in% c(
+      "Kenilworth Park",
+      "Berkeley Park",
+      "Westmoreland Park",
+      "Woodstock Park"))
+
+#plotting
+
+ggplot( data = Parks_species_eval,
+        mapping = aes(x = Common_Name,
+                      y = DBH,
+                      fill = Common_Name)) +
+  geom_boxplot() +
+  scale_fill_brewer(palette = "PiYG") +
+  facet_wrap(~Park) +
+  labs(title = "DBH of Various Tree Species in Parks near Reed College")
+```
+# Which park is best for my favorite snack?
+
+The following: 
+* Selects park and edible status for a new data frame
+* Drops NA values for selected columns
+* Removes "no" values from Edible and selects 6 different parks for analysis
+* Plots data, facets by park
+
+```{r}
+#cleaning
+
+edible_parks <- PDX_parks %>%
+  select(Park, Edible) %>%
+  drop_na() %>%
+  filter(Edible != "No", 
+         Park %in% c(
+      "Ed Benedict Park",
+      "Midland Park",
+      "Columbia Childrens Arboretum",
+      "Fernhill Park",
+      "Frazer Park",
+      "Buckman Field"))
+  
+#plotting
+
+ggplot( data = edible_parks, mapping = aes(x = Edible, fill = Edible)) +
+  geom_bar(color = "black") +
+  scale_fill_brewer(palette = "PRGn") +
+  facet_wrap(~Park) +
+labs(title = "Parks with Edible Fruit and Nut Access")
+
+```
+
+# Does DBH and family effect the amount of carbon sequestration in Farragut Park?
+
+The following:
+* Makes a data frame for Farragut Park
+* Makes a graph using geom_jitter
+* Uses geom_smooth to observe trends in the points using linear model
+* Colors by Family
+
+```{r}
+
+#sourcing
+
+farragut_prk <- get_pdxTrees_parks(park = "Farragut Park")
+
+#plotting
+
+ggplot(data = farragut_prk,
+       mapping = aes(x = Carbon_Sequestration_lb, y = DBH,
+                     color = Family)) +
+  geom_jitter(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "How does Carbon Sequestration Vary by Tree Family?")
+```
+
+
+# Comparing ash trees on Portland streets from 2017 to 2026
+
+The following:
+* Selects species and tree condition categories 
+* Makes every observation in Common_Name lowercase
+* Uses str_detect() to check for all ash trees in Common_Name
+* Repeats process for 2017 and 2026 versions
+* Plots both graphs
+```{r}
+#cleaning
+streets_2026 <- get_pdxTrees_streets() %>%
+   select(Common_Name, Condition)
+
+Streets_2026_cleaned <- streets_2026 %>% 
+  filter(str_detect(str_to_lower(Common_Name), "ash"))
+
+streets_2017 <- get_pdxTrees_streets(version = "2017") %>%
+   select(Common_Name, Condition)
+
+Streets_2017_cleaned <- streets_2017 %>% 
+  filter(str_detect(str_to_lower(Common_Name), "ash"))
+
+#plotting
+
+ggplot(data = Streets_2017_cleaned, mapping = aes(x = Common_Name)) +
+  geom_bar() +
+  facet_wrap(~Condition) +
+  labs(title = Ash Tree Counts per Condition 2017)
+  
+ggplot(data = Streets_2026_cleaned, mapping = aes(x = Common_Name)) +
+    geom_bar() +
+  facet_wrap(~Condition) +
+  labs(title = Ash Tree Counts per Condition 2026)
+```
+
+
+
+## An interactive map with `leaflet`
+
+The following code creates an interactive map with `leaflet` and the `pdxTrees_parks` data. It showcases:
+
+* Adding popups for each tree where you can customize the displayed information.
+* Changing the background map.
+* Including a mini-map.
+* Allows for analysis of updates pdxTrees data
+* Works with the latest available data in 2026
+
+
+```{r leaflet graph, fig.width= 8, fig.height=6}
+
+# Making the leaf popup icon 
+greenLeaflittle <- makeIcon(
+  iconUrl = "https://leafletjs.com/examples/custom-icons/leaf-green.png",
+  iconWidth = 10, iconHeight = 20,
+  iconAnchorX = 10, iconAnchorY = 10,
+  shadowUrl = "https://leafletjs.com/examples/custom-icons/leaf-shadow.png",
+ shadowWidth = 10, shadowHeight = 15,
+ shadowAnchorX = 5, shadowAnchorY = 5
+)
+
+
+# Pulling the data for Berkely Park 
+
+berkeley_prk <- get_pdxTrees_parks(version = "2026", park = "Berkeley Park")
+
+
+# Creating the popup label 
+
+labels <- paste("</b>", "Common Name:",
+                 berkeley_prk$Common_Name,
+                 "</b></br>", "Factoid: ", 
+              berkeley_prk$Species_Factoid) 
+
+
+leaflet() %>%
+  # Center the map
+  setView(lng = -122.6239, lat = 45.4726, zoom = 17) %>%
+  
+  # Base maps
+  addProviderTiles(providers$Esri.WorldTopoMap,
+    group = "Topographic") %>%
+  
+  addProviderTiles(providers$Esri.WorldImagery,
+    group = "Satellite") %>%
+  
+  # Tree markers
+  addMarkers(
+    ~Longitude,
+    ~Latitude,
+    data = berkeley_prk,
+    icon = greenLeaflittle,
+    popup = ~labels
+  ) %>%
+  
+  # Layer selector
+  addLayersControl(baseGroups = c("Topographic", "Satellite"),
+    options = layersControlOptions(collapsed = FALSE)) %>%
+  
+  # Mini map
+  addMiniMap()
+``` 
+

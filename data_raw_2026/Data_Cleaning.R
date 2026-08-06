@@ -14,7 +14,7 @@ Park_Trees_2026 <- utils::read.csv("data_raw_2026/Parks_Tree_Inventory.csv")
 Park_Trees_2026 <- Park_Trees_2026 %>%
   dplyr::mutate(Inventory_Date = as.Date(Inventory_Date))
 
- # add lat and long 
+# add lat and long 
 Park_Trees_2026 <- Park_Trees_2026 %>%
   sf::st_as_sf(crs = 3857, coords = c("X", "Y"))
 Park_Trees_2026 <- sf::st_transform(Park_Trees_2026, 4326)
@@ -28,9 +28,9 @@ Park_Trees_2026 <- sf::st_drop_geometry(Park_Trees_2026)
 #fix variable classifications
 Park_Trees_2026 <- Park_Trees_2026 %>%
   dplyr::mutate(inventory_date = lubridate::ymd(Inventory_Date), 
-         Latitude = as.numeric(Latitude), 
-         Longitude = as.numeric(Longitude),
-         UserID = as.character(UserID)) 
+                Latitude = as.numeric(Latitude), 
+                Longitude = as.numeric(Longitude),
+                UserID = as.character(UserID)) 
 
 #Matching Property IDs to parks 
 Park_PropID <- utils::read.csv("data_raw_2026/Matching_PropID.csv")
@@ -43,22 +43,23 @@ Park_Trees_2026 <- Park_Trees_2026 %>%
   dplyr:: select(-c("inventory_date")) %>%
   sf::st_drop_geometry() %>%
   dplyr::rename("Common_Name" = "Common_name",
-         "Collected_By" = "CollectedBy",
-         "Mature_Size" = "Size",
-         "Crown_Width_NS" = "CrownWidthNS",
-         "Crown_Width_EW" = "CrownWidthEW",
-         "Tree_Height" = "TreeHeight",
-         "Park" = "NAME",
-         "Scientific_Name" = "Genus_species",
-         "Total_Annual_Services" = "Total_Annual_Benefits",
-         "Crown_Base_Height" = "CrownBaseHeight") 
+                "Collected_By" = "CollectedBy",
+                "Mature_Size" = "Size",
+                "Crown_Width_NS" = "CrownWidthNS",
+                "Crown_Width_EW" = "CrownWidthEW",
+                "Tree_Height" = "TreeHeight",
+                "Park" = "NAME",
+                "Scientific_Name" = "Genus_species",
+                "Total_Annual_Services" = "Total_Annual_Benefits",
+                "Crown_Base_Height" = "CrownBaseHeight",
+                "Functional_Type" = "Functional_type") 
 
 Park_Trees_2026 <- dplyr::select(Park_Trees_2026, c("Longitude", "Latitude", "UserID", 
                                                     "Genus", "Family", "DBH", "Inventory_Date",
                                                     "Species", "Common_Name", "Condition",
                                                     "Tree_Height", "Crown_Width_NS","Crown_Width_EW",
                                                     "Crown_Base_Height", "Collected_By",
-                                                    "Park", "Scientific_Name", "Functional_type",
+                                                    "Park", "Scientific_Name", "Functional_Type",
                                                     "Mature_Size", "Native", "Edible", "Nuisance",
                                                     "Structural_Value", "Carbon_Storage_lb", "Carbon_Storage_value",
                                                     "Carbon_Sequestration_lb", "Carbon_Sequestration_value",
@@ -72,7 +73,7 @@ Park_Trees_2026 <- dplyr::select(Park_Trees_2026, c("Longitude", "Latitude", "Us
 
 #add edible
 add_edible <- Park_Trees_2026 %>%
-  dplyr::select(Edible, Common_Name, Functional_type, Species) %>% 
+  dplyr::select(Edible, Common_Name, Functional_Type, Species) %>% 
   unique(.)
 Street_Trees_2026 <- dplyr::left_join(Street_Trees_2026, add_edible, by = c("SPECIES_CO" = "Common_Name"))
 
@@ -96,19 +97,19 @@ Street_Trees_2026 <- Street_Trees_2026 %>%
 # Renaming to match  
 Street_Trees_2026 <- Street_Trees_2026 %>%
   dplyr::mutate( MATURE_SIZ = recode(MATURE_SIZ,
-      "Small" = "S",
-      "Medium" = "M",
-      "Large" = "L"),
-    MATURE_SIZ = factor(MATURE_SIZ, levels = c("S", "M", "L"))) %>% 
+                                     "Small" = "S",
+                                     "Medium" = "M",
+                                     "Large" = "L"),
+                 MATURE_SIZ = factor(MATURE_SIZ, levels = c("S", "M", "L"))) %>% 
   dplyr::select(c("OG_OBJECTI", "DATE_INVEN", "Species", "DBH_IE_DIA", 
-                   "CONDITION", "OVERHEAD_W", "ADDRESS", "Neighborhood", 
-                   "SPECIES_SC", "FAMILY", "GENUS_SCIE", "GENUS_COMM", "Functional_type",
+                  "CONDITION", "OVERHEAD_W", "ADDRESS", "Neighborhood", 
+                  "SPECIES_SC", "FAMILY", "GENUS_SCIE", "GENUS_COMM", "Functional_Type",
                   "Edible", "Longitude", "Latitude", "MATURE_SIZ")) %>% 
   dplyr::rename("UserID" = "OG_OBJECTI", "Inventory_Date" = "DATE_INVEN",
                 "DBH" = "DBH_IE_DIA", "Condition" = "CONDITION", "Wires" = "OVERHEAD_W", 
                 , "Address" = "ADDRESS", "Scientific" = "SPECIES_SC",
-                "Family" = "FAMILY", "Genus" = "GENUS_SCIE", "Common_Name" = "GENUS_COMM", 
-                "Mature_Size" = "MATURE_SIZ")
+                "Family" = "FAMILY", "Genus" = "GENUS_SCIE",
+                "Common_Name" = "GENUS_COMM", "Mature_Size" = "MATURE_SIZ")
 
 # Fixing Wires column 
 Street_Trees_2026 <- Street_Trees_2026 %>%
@@ -123,11 +124,12 @@ Street_Trees_2026 <- Street_Trees_2026 %>%
   as.data.frame()
 
 #Write csvs
-write.csv(Park_Trees_2026, file = "Park_Trees_2026", row.names = FALSE)
+write.csv(Park_Trees_2026, file = "Park_Trees_2026.csv", row.names = FALSE)
 write.csv(Street_Trees_2026, file = "Street_Trees_2026.csv", row.names = FALSE)
 # Add datafiles to the project in a project
 #usethis::use_data(Park_Trees_2026, overwrite = TRUE,
-                 # compress = "xz", version = 2)
+# compress = "xz", version = 2)
 
 #usethis::use_data(Street_Trees_2026, overwrite = TRUE,
-                 # compress = "xz", version = 2)
+# compress = "xz", version = 2)
+
