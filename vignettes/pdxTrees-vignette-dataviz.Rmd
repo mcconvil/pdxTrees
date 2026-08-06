@@ -312,7 +312,7 @@ ggplot(data = native_parktrees,
 # Using geom_alluvium to see the condition of Ash/Mountain Ash trees in 2026 Portland streets
 
 The following:
-* Filters to two types of ash trees from the streets dataset from 2026
+* Filters to two types of ash trees from the streets dataset from 2019 data
 * Selects species and condition
 * Creates a data frame with count to analyze common observations (provides "n" column)
 * Makes a geom_alluvium to analyze the condition of ash trees on Portland streets
@@ -321,7 +321,7 @@ The following:
 ```{r}
 
 #cleaning
-ash_trees_condition <- get_pdxTrees_streets(version = "2019") %>%
+ash_trees_condition <- get_pdxTrees_streets() %>%
   filter(Common_Name %in% c("Mountain-Ash", 
                             "Ash")) %>%
   select("Common_Name", "Condition")
