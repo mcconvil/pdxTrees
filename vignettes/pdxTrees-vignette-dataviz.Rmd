@@ -321,7 +321,7 @@ The following:
 ```{r}
 
 #cleaning
-ash_trees_condition <- get_pdxTrees_streets(version = "2026") %>%
+ash_trees_condition <- get_pdxTrees_streets(version = "2019") %>%
   filter(Common_Name %in% c("Mountain-Ash", 
                             "Ash")) %>%
   select("Common_Name", "Condition")
