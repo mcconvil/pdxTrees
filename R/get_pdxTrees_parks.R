@@ -156,7 +156,7 @@ get_pdxTrees_parks <- function(park = NULL, version = "2019"){
   
   if (version == "2026") {
     # grabbing the data from github
-    dat3 <- readr::read_csv("https://github.com/ufds-lab/pdxTrees-package/blob/master/data/Park_Trees_2026.csv",
+    dat3 <- readr::read_csv("https://github.com/ufds-lab/pdxTrees-package/blob/master/data/pdxTrees_parks.rda",
                            col_types = systems_cols)
     # returning the data
     if(is.null(park)){

@@ -133,3 +133,5 @@ write.csv(Street_Trees_2026, file = "Street_Trees_2026.csv", row.names = FALSE)
 #usethis::use_data(Street_Trees_2026, overwrite = TRUE,
 # compress = "xz", version = 2)
 
+save(Park_Trees_2026, file = "Park_Trees_2026.rda")
+save(Street_Trees_2026, file = "Street_Trees_2026.rda")
