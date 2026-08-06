@@ -141,7 +141,7 @@ get_pdxTrees_streets <- function(neighborhood = NULL, version = "2019"){
       `Longitude` = readr::col_double(), 
       `Latitude` = readr::col_double()
     )
-    dat_3 <- readr::read_csv("https://github.com/ufds-lab/pdxTrees-package/blob/master/data/Street_Trees_2026.rda",
+    dat_3 <- readr::read_csv("https://github.com/ufds-lab/pdxTrees-package/blob/master/data/Street_Trees_2026.csv",
                              col_types = systems_cols_3)
     
     # returning the data 
