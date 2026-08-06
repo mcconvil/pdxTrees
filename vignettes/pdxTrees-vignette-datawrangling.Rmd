@@ -1,18 +1,13 @@
 ---
-title: "pdxTrees-vignette(datawrangling)"
-output: html_document
----
-
----
 title: "Data Wrangling with pdxTrees"
 output: rmarkdown::html_vignette 
 
 
 vignette: >
-  %\VignetteIndexEntry{Data Visulization with pdxTrees}
+  %\VignetteIndexEntry{Data Wrangling with pdxTrees}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
-
+  
 ---
 
 ```{r, include = FALSE}

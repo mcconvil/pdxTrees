@@ -318,7 +318,6 @@ The following:
 * Makes a geom_alluvium to analyze the condition of ash trees on Portland streets
 * Uses geom_stratum to draw rectangular blocks on each axis
 * Renames the axes
-
 ```{r}
 
 #cleaning
@@ -473,23 +472,23 @@ streets_2026 <- get_pdxTrees_streets() %>%
 Streets_2026_cleaned <- streets_2026 %>% 
   filter(str_detect(str_to_lower(Common_Name), "ash"))
 
-streets_2017 <- get_pdxTrees_streets(version = "2017") %>%
+streets_2019 <- get_pdxTrees_streets(version = "2019") %>%
    select(Common_Name, Condition)
 
-Streets_2017_cleaned <- streets_2017 %>% 
+Streets_2019_cleaned <- streets_2019 %>% 
   filter(str_detect(str_to_lower(Common_Name), "ash"))
 
 #plotting
 
-ggplot(data = Streets_2017_cleaned, mapping = aes(x = Common_Name)) +
+ggplot(data = Streets_2019_cleaned, mapping = aes(x = Common_Name)) +
   geom_bar() +
   facet_wrap(~Condition) +
-  labs(title = Ash Tree Counts per Condition 2017)
+  labs(title = "Ash Tree Counts per Condition 2019")
   
 ggplot(data = Streets_2026_cleaned, mapping = aes(x = Common_Name)) +
     geom_bar() +
   facet_wrap(~Condition) +
-  labs(title = Ash Tree Counts per Condition 2026)
+  labs(title = "Ash Tree Counts per Condition 2026")
 ```
 
 
