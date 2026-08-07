@@ -521,7 +521,7 @@ greenLeaflittle <- makeIcon(
 
 # Pulling the data for Berkely Park 
 
-berkeley_prk <- get_pdxTrees_parks(version = "2026", park = "Berkeley Park")
+berkeley_prk <- get_pdxTrees_parks(park = "Berkeley Park", version = "2026")
 
 
 # Creating the popup label 
