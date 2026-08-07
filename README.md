@@ -7,10 +7,10 @@
 trees in Portland, OR. There are two datasets that can be accessed with
 this package:
 
-- `get_pdxTrees_parks()` pulls in data on up to 25,534 trees from 174
+- `get_pdxTrees_parks()` pulls in data on up to 25,734 trees from 174
   Portland parks.
 
-- `get_pdxTrees_streets()` pulls in data on up to 218,602 trees located
+- `get_pdxTrees_streets()` pulls in data on up to 252,180 trees located
   on Portland’s streets. A street tree is loosely defined as a tree
   generally in the public right-of-way, usually between the sidewalk and
   the street.
@@ -25,8 +25,8 @@ Project](https://www.portland.gov/trees/get-involved/tree-inventory#toc-street-t
 The Tree Inventory Project has gathered data on Portland trees since
 2010, collecting this data in the summer months with a team of over
 1,300 volunteers and city employees. The streets trees were inventoried
-from 2010 to 2016, and the park trees were inventoried from 2017 to
-2019. More information on the data can be found
+from 2010 to 2022, and the park trees were inventoried from 2017 to
+2020. More information on the data can be found
 [here](https://www.portland.gov/trees/get-involved/tree-inventory#toc-street-tree-inventory).
 
 ## To install the package
