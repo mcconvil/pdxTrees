@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Data Wrangling with pdxTrees</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Data Wrangling with pdxTrees</h1>
+
+
+
+<p><code>pdxTrees</code> is a data package composed of information on
+inventoried trees in Portland, OR. There are two datasets that can be
+accessed with this package:</p>
+<ul>
+<li><p><code>get_pdxTrees_parks(version = &quot;2019&quot;)</code> pulls in data
+on up to 25,534 trees from 174 Portland parks.</p></li>
+<li><p><code>get_pdxTrees_parks(version = &quot;2026&quot;)</code> pulls in data
+on up to 25,734 trees from 316 Portland parks.</p></li>
+<li><p><code>get_pdxTrees_streets(version = &quot;2019&quot;)</code> pulls in data
+on up to 218,602 trees located on Portland’s streets. A street tree is
+loosely defined as a tree generally in the public right-of-way, usually
+between the sidewalk and the street.
+*<code>get_pdxTrees_streets(version = &quot;2026)</code> pulls in data on up
+to 252,180 trees located on Portland’s streets. A street tree is loosely
+defined as a tree generally in the public right-of-way, usually between
+the sidewalk and the street.</p></li>
+</ul>
+<p>The street trees are categorized by one of the 95 Portland
+neighborhoods and the park trees are categorized by the public parks in
+which they grow.</p>
+<p>Here are some examples of the different ways <code>pdxTrees</code>
+can be used in an educational setting to learn data visualization!</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># First make sure you have the package downloaded! </span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;mcconvil/pdxTrees&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co"># Loading the required libraries</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">library</span>(pdxTrees) </span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="fu">library</span>(forcats)</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="fu">library</span>(devtools)</span></code></pre></div>
+<div id="creating-a-new-variable-with-mutate-and-case_when" class="section level2">
+<h2>Creating a new variable with mutate() and case_when()</h2>
+<p>The following code creates an new variable with <code>mutate</code>,
+<code>case_when</code>, and the <code>pdxTrees_parks</code> data. It: *
+Removes three variables from the new subset data set using
+<code>select</code> * Creates a new variable that groups the carbon
+storage values int NA, Low, Moderate, and High * Shows you the first few
+rows of the new subset data set * Counts how many trees are in each
+category of <code>carbon_group</code></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># Pulling the data for Parks from the 2019 data set</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>pdxTrees_Parks <span class="ot">&lt;-</span> <span class="fu">get_pdxTrees_parks</span>()</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#create a subset data frame</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>Carbon_Parks <span class="ot">&lt;-</span> pdxTrees_Parks <span class="sc">%&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="co">#get rid of extra variables</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Collected_By&quot;</span>, <span class="st">&quot;Nuisance&quot;</span>, <span class="st">&quot;Functional_Type&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="co">#add a new variable that groups carbon storage value</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Carbon_Group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>        <span class="fu">is.na</span>(Carbon_Storage_value) <span class="sc">~</span> <span class="cn">NA</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>        Carbon_Storage_value <span class="sc">&lt;=</span> <span class="dv">250</span> <span class="sc">~</span> <span class="st">&quot;Low&quot;</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>        <span class="fu">between</span>(Carbon_Storage_value, <span class="dv">250</span>, <span class="dv">750</span>) <span class="sc">~</span> <span class="st">&quot;Moderate&quot;</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>        Carbon_Storage_value <span class="sc">&gt;</span> <span class="dv">750</span> <span class="sc">~</span> <span class="st">&quot;High&quot;</span>)) </span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#view small piece of new data frame</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="fu">glimpse</span>(Carbon_Parks)</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt; Rows: 25,534</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt; Columns: 32</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#&gt; $ Longitude                  &lt;dbl&gt; -122.6936, -122.6938, -122.6942, -122.6939,…</span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#&gt; $ Latitude                   &lt;dbl&gt; 45.57491, 45.57489, 45.57493, 45.57490, 45.…</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="co">#&gt; $ UserID                     &lt;chr&gt; &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;…</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt; $ Genus                      &lt;chr&gt; &quot;Pseudotsuga&quot;, &quot;Pseudotsuga&quot;, &quot;Crataegus&quot;, …</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co">#&gt; $ Family                     &lt;chr&gt; &quot;Pinaceae&quot;, &quot;Pinaceae&quot;, &quot;Rosaceae&quot;, &quot;Fagace…</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt; $ DBH                        &lt;dbl&gt; 37.4, 32.5, 9.7, 10.3, 33.2, 32.1, 28.4, 27…</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt; $ Inventory_Date             &lt;dttm&gt; 2017-05-09, 2017-05-09, 2017-05-09, 2017-0…</span></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#&gt; $ Species                    &lt;chr&gt; &quot;PSME&quot;, &quot;PSME&quot;, &quot;CRLA&quot;, &quot;QURU&quot;, &quot;PSME&quot;, &quot;PS…</span></span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#&gt; $ Common_Name                &lt;chr&gt; &quot;Douglas-Fir&quot;, &quot;Douglas-Fir&quot;, &quot;Lavalle Hawt…</span></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt; $ Condition                  &lt;chr&gt; &quot;Fair&quot;, &quot;Fair&quot;, &quot;Fair&quot;, &quot;Poor&quot;, &quot;Fair&quot;, &quot;Fa…</span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="co">#&gt; $ Tree_Height                &lt;dbl&gt; 105, 94, 23, 28, 102, 95, 103, 105, 97, 112…</span></span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co">#&gt; $ Crown_Width_NS             &lt;dbl&gt; 44, 49, 28, 38, 43, 35, 40, 45, 56, 35, 45,…</span></span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a><span class="co">#&gt; $ Crown_Width_EW             &lt;dbl&gt; 57, 45, 27, 31, 44, 39, 40, 29, 45, 33, 50,…</span></span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a><span class="co">#&gt; $ Crown_Base_Height          &lt;dbl&gt; 4, 4, 3, 5, 4, 12, 6, 13, 5, 17, 6, 6, 4, 5…</span></span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a><span class="co">#&gt; $ Park                       &lt;chr&gt; &quot;Gammans Park&quot;, &quot;Gammans Park&quot;, &quot;Gammans Pa…</span></span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a><span class="co">#&gt; $ Scientific_Name            &lt;chr&gt; &quot;Pseudotsuga menziesii&quot;, &quot;Pseudotsuga menzi…</span></span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="co">#&gt; $ Mature_Size                &lt;fct&gt; L, L, S, L, L, L, L, L, L, L, L, L, L, M, S…</span></span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="co">#&gt; $ Native                     &lt;chr&gt; &quot;Yes&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;No&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;Ye…</span></span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a><span class="co">#&gt; $ Edible                     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…</span></span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a><span class="co">#&gt; $ Structural_Value           &lt;dbl&gt; 10101.06, 7900.55, 1110.81, 525.26, 8224.54…</span></span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a><span class="co">#&gt; $ Carbon_Storage_lb          &lt;dbl&gt; 3223.3, 2460.8, 310.3, 400.1, 2533.4, 2333.…</span></span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a><span class="co">#&gt; $ Carbon_Storage_value       &lt;dbl&gt; 209.07, 159.62, 20.13, 25.95, 164.33, 151.3…</span></span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a><span class="co">#&gt; $ Carbon_Sequestration_lb    &lt;dbl&gt; 36.8, 31.3, 14.8, 6.0, 32.0, 30.8, 26.8, 25…</span></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&gt; $ Carbon_Sequestration_value &lt;dbl&gt; 2.39, 2.03, 0.96, 0.39, 2.08, 2.00, 1.74, 1…</span></span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&gt; $ Stormwater_ft              &lt;dbl&gt; 150.3, 133.0, 35.4, 38.3, 115.5, 85.3, 99.7…</span></span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a><span class="co">#&gt; $ Stormwater_value           &lt;dbl&gt; 10.05, 8.89, 2.37, 2.56, 7.72, 5.70, 6.66, …</span></span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a><span class="co">#&gt; $ Pollution_Removal_value    &lt;dbl&gt; 18.25, 16.15, 4.31, 4.65, 14.03, 10.36, 12.…</span></span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a><span class="co">#&gt; $ Pollution_Removal_oz       &lt;dbl&gt; 40.4, 35.8, 9.5, 10.3, 31.1, 22.9, 26.8, 22…</span></span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="co">#&gt; $ Total_Annual_Services      &lt;dbl&gt; 30.69, 27.06, 7.64, 7.59, 23.82, 18.06, 20.…</span></span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a><span class="co">#&gt; $ Origin                     &lt;chr&gt; &quot;North America - from British Columbia sout…</span></span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a><span class="co">#&gt; $ Species_Factoid            &lt;chr&gt; &quot;Bracts on cones look like a mouse&#39;s feet a…</span></span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a><span class="co">#&gt; $ Carbon_Group               &lt;chr&gt; &quot;Low&quot;, &quot;Low&quot;, &quot;Low&quot;, &quot;Low&quot;, &quot;Low&quot;, &quot;Low&quot;, &quot;…</span></span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a></span>
+<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a><span class="co">#show how many observations in each carbon group</span></span>
+<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a><span class="co">#note there are 49 NAs to begin with</span></span>
+<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a><span class="fu">count</span>(Carbon_Parks, Carbon_Group)</span>
+<span id="cb2-59"><a href="#cb2-59" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 2</span></span>
+<span id="cb2-60"><a href="#cb2-60" tabindex="-1"></a><span class="co">#&gt;   Carbon_Group     n</span></span>
+<span id="cb2-61"><a href="#cb2-61" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;int&gt;</span></span>
+<span id="cb2-62"><a href="#cb2-62" tabindex="-1"></a><span class="co">#&gt; 1 High           542</span></span>
+<span id="cb2-63"><a href="#cb2-63" tabindex="-1"></a><span class="co">#&gt; 2 Low          21556</span></span>
+<span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a><span class="co">#&gt; 3 Moderate      3387</span></span>
+<span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a><span class="co">#&gt; 4 &lt;NA&gt;            49</span></span></code></pre></div>
+</div>
+<div id="finding-summary-statistics-and-grouping" class="section level2">
+<h2>Finding Summary Statistics and grouping</h2>
+<p>The following code finds summary statistics for each category of
+<code>Condition</code> before arranging it in ascending order with
+<code>group_by</code>, <code>summarize</code>, <code>arrange</code>, and
+the <code>pdxTrees_parks</code> data.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#create a subset data frame</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>Park_Stats <span class="ot">&lt;-</span> Carbon_Parks <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="co"># group data by each category of condition</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="fu">group_by</span>(Condition) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="co"># find the mean DBH and tree height in each category and count how many trees per category</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">mean_DBH =</span> <span class="fu">mean</span>(DBH, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>        <span class="at">mean_tree_height =</span> <span class="fu">mean</span>(Tree_Height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>        <span class="at">trees =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  <span class="co">#arrange the data in ascending order by trees</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>    <span class="fu">arrange</span>(trees)</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co"># show table output</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>Park_Stats</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 4</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt;   Condition mean_DBH mean_tree_height trees</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;dbl&gt;            &lt;dbl&gt; &lt;int&gt;</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; 1 Dead          11.2             34.2   264</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; 2 Poor          13.9             41.1  1345</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; 3 Good          17.5             50.2  1646</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; 4 Fair          21.4             68.7 22279</span></span></code></pre></div>
+</div>
+<div id="changing-the-class-of-a-variable-and-ordering-the-levels" class="section level2">
+<h2>Changing the class of a variable and ordering the levels</h2>
+<p>The following code identifies the class and level of a variable and
+changes it with <code>class</code>, <code>mutate</code>,
+<code>factor</code>, <code>levels</code>, and the
+<code>pdxTrees_parks</code> data.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#show variable class </span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">class</span>(Carbon_Parks<span class="sc">$</span>Condition)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;character&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#show variable order</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="fu">levels</span>(Carbon_Parks<span class="sc">$</span>Condition)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; NULL</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#change to ordered and set the order</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>Carbon_Parks <span class="ot">&lt;-</span> Carbon_Parks <span class="sc">%&gt;%</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Condition =</span> <span class="fu">factor</span>(Condition,</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Dead&quot;</span>, <span class="st">&quot;Poor&quot;</span>, <span class="st">&quot;Fair&quot;</span>, <span class="st">&quot;Good&quot;</span>)))</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#show new variable class </span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="fu">class</span>(Carbon_Parks<span class="sc">$</span>Condition)</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; [1] &quot;factor&quot;</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#show new variable order</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="fu">levels</span>(Carbon_Parks<span class="sc">$</span>Condition)</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Dead&quot; &quot;Poor&quot; &quot;Fair&quot; &quot;Good&quot;</span></span></code></pre></div>
+</div>
+<div id="using-the-or-logical-operator-to-select-above-average-trees" class="section level2">
+<h2>Using the or logical operator to select above average trees</h2>
+<p>The following code filters the data based on selected variable values
+with <code>filter</code> and the <code>pdxTrees_parks</code> data.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#create a subset data frame</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>Carbon_Parks <span class="ot">&lt;-</span> Carbon_Parks <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="co">#show rows where condition is set to good and tree height is greater than or equal to its average or DBH is greater than or equal to its average</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">filter</span>(Condition <span class="sc">==</span> <span class="st">&quot;Good&quot;</span>, (Tree_Height <span class="sc">&gt;=</span> <span class="dv">50</span> <span class="sc">|</span> DBH <span class="sc">&gt;=</span> <span class="fl">17.5</span>))</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co"># show table output</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>Carbon_Parks</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; # A tibble: 750 × 32</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt;    Longitude Latitude UserID Genus      Family   DBH Inventory_Date      Species</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt;        &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;  &lt;dbl&gt; &lt;dttm&gt;              &lt;chr&gt;  </span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt;  1     -123.     45.6 2318   Sequoiade… Cupre…  69.2 2017-05-17 00:00:00 SEGI   </span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt;  2     -123.     45.6 43     Quercus    Fagac…  22.6 2017-05-22 00:00:00 QUFR   </span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt;  3     -123.     45.5 5065   Pseudotsu… Pinac…  16.9 2017-06-17 00:00:00 PSME   </span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt;  4     -123.     45.5 5073   Quercus    Fagac…  25.4 2017-06-17 00:00:00 QUPA   </span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;  5     -123.     45.5 260    Pseudotsu… Pinac…  35.5 2017-06-17 00:00:00 PSME   </span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;  6     -123.     45.5 261    Thuja      Cupre…  32.1 2017-06-17 00:00:00 THPL   </span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt;  7     -123.     45.5 5105   Quercus    Fagac…  30.6 2017-06-17 00:00:00 QUPA   </span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt;  8     -123.     45.5 5106   Thuja      Cupre…  28   2017-06-17 00:00:00 THPL   </span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt;  9     -123.     45.5 5111   Thuja      Cupre…  31.1 2017-06-17 00:00:00 THPL   </span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt; 10     -123.     45.5 986    Platanus   Plata…  28.8 2017-06-17 00:00:00 PLAC   </span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt; # ℹ 740 more rows</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt; # ℹ 24 more variables: Common_Name &lt;chr&gt;, Condition &lt;fct&gt;, Tree_Height &lt;dbl&gt;,</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="co">#&gt; #   Crown_Width_NS &lt;dbl&gt;, Crown_Width_EW &lt;dbl&gt;, Crown_Base_Height &lt;dbl&gt;,</span></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co">#&gt; #   Park &lt;chr&gt;, Scientific_Name &lt;chr&gt;, Mature_Size &lt;fct&gt;, Native &lt;chr&gt;,</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="co">#&gt; #   Edible &lt;chr&gt;, Structural_Value &lt;dbl&gt;, Carbon_Storage_lb &lt;dbl&gt;,</span></span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="co">#&gt; #   Carbon_Storage_value &lt;dbl&gt;, Carbon_Sequestration_lb &lt;dbl&gt;,</span></span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="co">#&gt; #   Carbon_Sequestration_value &lt;dbl&gt;, Stormwater_ft &lt;dbl&gt;, …</span></span></code></pre></div>
+</div>
+<div id="simple-random-sampling" class="section level2">
+<h2>Simple random sampling</h2>
+<p>The following code creates an simple random sample with
+<code>slice_sample</code>, and the <code>pdxTrees_parks</code> data.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#create a subset data frame</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>Park_Sample <span class="ot">&lt;-</span> Carbon_Parks <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>    <span class="co">#simple random sample</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">100</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#display first few rows</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="fu">head</span>(Park_Sample)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 32</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt;   Longitude Latitude UserID Genus       Family   DBH Inventory_Date      Species</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;  &lt;dbl&gt; &lt;dttm&gt;              &lt;chr&gt;  </span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; 1     -123.     45.5 6054   Thuja       Cupre…  42.6 2018-08-23 00:00:00 THPL   </span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; 2     -123.     45.6 10230  Acer        Sapin…  31   2018-08-30 00:00:00 ACPL   </span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; 3     -123.     45.5 6075   Fagus       Fagac…  50.1 2018-08-23 00:00:00 FASY   </span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; 4     -123.     45.6 10432  Thuja       Cupre…  28.3 2018-08-30 00:00:00 THPL   </span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; 5     -123.     45.5 560    Pseudotsuga Pinac…  46.8 2017-06-29 00:00:00 PSME   </span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; 6     -123.     45.5 1245   Pseudotsuga Pinac…  37.6 2017-07-22 00:00:00 PSME   </span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; # ℹ 24 more variables: Common_Name &lt;chr&gt;, Condition &lt;fct&gt;, Tree_Height &lt;dbl&gt;,</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; #   Crown_Width_NS &lt;dbl&gt;, Crown_Width_EW &lt;dbl&gt;, Crown_Base_Height &lt;dbl&gt;,</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt; #   Park &lt;chr&gt;, Scientific_Name &lt;chr&gt;, Mature_Size &lt;fct&gt;, Native &lt;chr&gt;,</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; #   Edible &lt;chr&gt;, Structural_Value &lt;dbl&gt;, Carbon_Storage_lb &lt;dbl&gt;,</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; #   Carbon_Storage_value &lt;dbl&gt;, Carbon_Sequestration_lb &lt;dbl&gt;,</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt; #   Carbon_Sequestration_value &lt;dbl&gt;, Stormwater_ft &lt;dbl&gt;,</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt; #   Stormwater_value &lt;dbl&gt;, Pollution_Removal_value &lt;dbl&gt;, …</span></span></code></pre></div>
+</div>
+<div id="summarize" class="section level2">
+<h2>Summarize</h2>
+<p>The following code summarizes statistic your sampled dataset with
+<code>select</code>, <code>summary</code>, <code>print</code>, and the
+<code>pdxTrees_parks</code> data.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#create a name to store data under</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>Summary_Sample <span class="ot">&lt;-</span> Park_Sample <span class="sc">%&gt;%</span> </span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="co">#choose variables to summarize</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="fu">select</span>(DBH, Tree_Height) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="co">#get summary statistics on chosen variables</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">summary</span>()</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#show output and observe changes to medians</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>Summary_Sample</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;       DBH         Tree_Height    </span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;  Min.   :11.50   Min.   : 32.00  </span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt;  1st Qu.:23.52   1st Qu.: 63.75  </span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt;  Median :31.85   Median : 74.50  </span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt;  Mean   :32.16   Mean   : 83.03  </span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.:40.10   3rd Qu.:104.00  </span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt;  Max.   :65.10   Max.   :174.00</span></span></code></pre></div>
+</div>
+<div id="convert-dbh-and-tree_height-to-the-metric-system" class="section level2">
+<h2>Convert <code>DBH</code> and <code>Tree_Height</code> to the Metric
+System</h2>
+<p>The following code converts <code>DBH</code> and
+<code>Tree_Height</code> to the metric system with <code>mutate</code>,
+<code>glimpse</code>, and the <code>pdxTrees_parks</code> data.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>pdxTrees_Parks_m <span class="ot">&lt;-</span> pdxTrees_Parks <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="co"># multiply each variable by the conversion and change `DBH` to cm and `Tree_Height` to m</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">DBH_cm =</span> <span class="fl">2.54</span> <span class="sc">*</span> DBH,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>         <span class="at">Tree_Height_m =</span> <span class="fl">0.3048</span> <span class="sc">*</span> Tree_Height)</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#show table</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="fu">glimpse</span>(pdxTrees_Parks_m)</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; Rows: 25,534</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; Columns: 36</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; $ Longitude                  &lt;dbl&gt; -122.6936, -122.6938, -122.6942, -122.6939,…</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; $ Latitude                   &lt;dbl&gt; 45.57491, 45.57489, 45.57493, 45.57490, 45.…</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; $ UserID                     &lt;chr&gt; &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;…</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; $ Genus                      &lt;chr&gt; &quot;Pseudotsuga&quot;, &quot;Pseudotsuga&quot;, &quot;Crataegus&quot;, …</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt; $ Family                     &lt;chr&gt; &quot;Pinaceae&quot;, &quot;Pinaceae&quot;, &quot;Rosaceae&quot;, &quot;Fagace…</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt; $ DBH                        &lt;dbl&gt; 37.4, 32.5, 9.7, 10.3, 33.2, 32.1, 28.4, 27…</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt; $ Inventory_Date             &lt;dttm&gt; 2017-05-09, 2017-05-09, 2017-05-09, 2017-0…</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt; $ Species                    &lt;chr&gt; &quot;PSME&quot;, &quot;PSME&quot;, &quot;CRLA&quot;, &quot;QURU&quot;, &quot;PSME&quot;, &quot;PS…</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">#&gt; $ Common_Name                &lt;chr&gt; &quot;Douglas-Fir&quot;, &quot;Douglas-Fir&quot;, &quot;Lavalle Hawt…</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt; $ Condition                  &lt;chr&gt; &quot;Fair&quot;, &quot;Fair&quot;, &quot;Fair&quot;, &quot;Poor&quot;, &quot;Fair&quot;, &quot;Fa…</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="co">#&gt; $ Tree_Height                &lt;dbl&gt; 105, 94, 23, 28, 102, 95, 103, 105, 97, 112…</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt; $ Crown_Width_NS             &lt;dbl&gt; 44, 49, 28, 38, 43, 35, 40, 45, 56, 35, 45,…</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt; $ Crown_Width_EW             &lt;dbl&gt; 57, 45, 27, 31, 44, 39, 40, 29, 45, 33, 50,…</span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt; $ Crown_Base_Height          &lt;dbl&gt; 4, 4, 3, 5, 4, 12, 6, 13, 5, 17, 6, 6, 4, 5…</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt; $ Collected_By               &lt;chr&gt; &quot;Staff&quot;, &quot;Staff&quot;, &quot;Staff&quot;, &quot;Staff&quot;, &quot;Staff&quot;…</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&gt; $ Park                       &lt;chr&gt; &quot;Gammans Park&quot;, &quot;Gammans Park&quot;, &quot;Gammans Pa…</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&gt; $ Scientific_Name            &lt;chr&gt; &quot;Pseudotsuga menziesii&quot;, &quot;Pseudotsuga menzi…</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&gt; $ Functional_Type            &lt;chr&gt; &quot;CE&quot;, &quot;CE&quot;, &quot;BD&quot;, &quot;BD&quot;, &quot;CE&quot;, &quot;CE&quot;, &quot;CE&quot;, &quot;…</span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a><span class="co">#&gt; $ Mature_Size                &lt;fct&gt; L, L, S, L, L, L, L, L, L, L, L, L, L, M, S…</span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="co">#&gt; $ Native                     &lt;chr&gt; &quot;Yes&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;No&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;Ye…</span></span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="co">#&gt; $ Edible                     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…</span></span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a><span class="co">#&gt; $ Nuisance                   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…</span></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a><span class="co">#&gt; $ Structural_Value           &lt;dbl&gt; 10101.06, 7900.55, 1110.81, 525.26, 8224.54…</span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a><span class="co">#&gt; $ Carbon_Storage_lb          &lt;dbl&gt; 3223.3, 2460.8, 310.3, 400.1, 2533.4, 2333.…</span></span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a><span class="co">#&gt; $ Carbon_Storage_value       &lt;dbl&gt; 209.07, 159.62, 20.13, 25.95, 164.33, 151.3…</span></span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a><span class="co">#&gt; $ Carbon_Sequestration_lb    &lt;dbl&gt; 36.8, 31.3, 14.8, 6.0, 32.0, 30.8, 26.8, 25…</span></span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a><span class="co">#&gt; $ Carbon_Sequestration_value &lt;dbl&gt; 2.39, 2.03, 0.96, 0.39, 2.08, 2.00, 1.74, 1…</span></span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a><span class="co">#&gt; $ Stormwater_ft              &lt;dbl&gt; 150.3, 133.0, 35.4, 38.3, 115.5, 85.3, 99.7…</span></span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a><span class="co">#&gt; $ Stormwater_value           &lt;dbl&gt; 10.05, 8.89, 2.37, 2.56, 7.72, 5.70, 6.66, …</span></span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a><span class="co">#&gt; $ Pollution_Removal_value    &lt;dbl&gt; 18.25, 16.15, 4.31, 4.65, 14.03, 10.36, 12.…</span></span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a><span class="co">#&gt; $ Pollution_Removal_oz       &lt;dbl&gt; 40.4, 35.8, 9.5, 10.3, 31.1, 22.9, 26.8, 22…</span></span>
+<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a><span class="co">#&gt; $ Total_Annual_Services      &lt;dbl&gt; 30.69, 27.06, 7.64, 7.59, 23.82, 18.06, 20.…</span></span>
+<span id="cb8-44"><a href="#cb8-44" tabindex="-1"></a><span class="co">#&gt; $ Origin                     &lt;chr&gt; &quot;North America - from British Columbia sout…</span></span>
+<span id="cb8-45"><a href="#cb8-45" tabindex="-1"></a><span class="co">#&gt; $ Species_Factoid            &lt;chr&gt; &quot;Bracts on cones look like a mouse&#39;s feet a…</span></span>
+<span id="cb8-46"><a href="#cb8-46" tabindex="-1"></a><span class="co">#&gt; $ DBH_cm                     &lt;dbl&gt; 94.996, 82.550, 24.638, 26.162, 84.328, 81.…</span></span>
+<span id="cb8-47"><a href="#cb8-47" tabindex="-1"></a><span class="co">#&gt; $ Tree_Height_m              &lt;dbl&gt; 32.0040, 28.6512, 7.0104, 8.5344, 31.0896, …</span></span>
+<span id="cb8-48"><a href="#cb8-48" tabindex="-1"></a></span>
+<span id="cb8-49"><a href="#cb8-49" tabindex="-1"></a></span>
+<span id="cb8-50"><a href="#cb8-50" tabindex="-1"></a><span class="co"># Pulling the data for Streets from the 2019 data set</span></span>
+<span id="cb8-51"><a href="#cb8-51" tabindex="-1"></a>pdxTrees_Streets <span class="ot">&lt;-</span> <span class="fu">get_pdxTrees_streets</span>()</span>
+<span id="cb8-52"><a href="#cb8-52" tabindex="-1"></a></span>
+<span id="cb8-53"><a href="#cb8-53" tabindex="-1"></a></span>
+<span id="cb8-54"><a href="#cb8-54" tabindex="-1"></a>pdxTrees_Streets_m <span class="ot">&lt;-</span> pdxTrees_Streets <span class="sc">%&gt;%</span> </span>
+<span id="cb8-55"><a href="#cb8-55" tabindex="-1"></a>  <span class="co"># multiply each variable by the conversion and change `DBH` to cm and `Tree_Height` to m</span></span>
+<span id="cb8-56"><a href="#cb8-56" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">DBH_cm =</span> <span class="fl">2.54</span> <span class="sc">*</span> DBH)</span>
+<span id="cb8-57"><a href="#cb8-57" tabindex="-1"></a></span>
+<span id="cb8-58"><a href="#cb8-58" tabindex="-1"></a></span>
+<span id="cb8-59"><a href="#cb8-59" tabindex="-1"></a><span class="co">#show table</span></span>
+<span id="cb8-60"><a href="#cb8-60" tabindex="-1"></a><span class="fu">glimpse</span>(pdxTrees_Streets_m)</span>
+<span id="cb8-61"><a href="#cb8-61" tabindex="-1"></a><span class="co">#&gt; Rows: 218,602</span></span>
+<span id="cb8-62"><a href="#cb8-62" tabindex="-1"></a><span class="co">#&gt; Columns: 24</span></span>
+<span id="cb8-63"><a href="#cb8-63" tabindex="-1"></a><span class="co">#&gt; $ UserID           &lt;chr&gt; &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;10&quot;, &quot;1…</span></span>
+<span id="cb8-64"><a href="#cb8-64" tabindex="-1"></a><span class="co">#&gt; $ Inventory_Date   &lt;dttm&gt; 2010-08-21, 2010-08-21, 2010-08-21, 2010-08-21, 2010…</span></span>
+<span id="cb8-65"><a href="#cb8-65" tabindex="-1"></a><span class="co">#&gt; $ Species          &lt;chr&gt; &quot;PRPL&quot;, &quot;ACMA&quot;, &quot;PLAC&quot;, &quot;CO&quot;, &quot;ACMA&quot;, &quot;ACPL&quot;, &quot;ACPL&quot;,…</span></span>
+<span id="cb8-66"><a href="#cb8-66" tabindex="-1"></a><span class="co">#&gt; $ DBH              &lt;dbl&gt; 6.1, 36.3, 20.5, 8.2, 55.7, 18.6, 18.8, 16.0, 6.2, 19…</span></span>
+<span id="cb8-67"><a href="#cb8-67" tabindex="-1"></a><span class="co">#&gt; $ Condition        &lt;chr&gt; &quot;Good&quot;, &quot;Poor&quot;, &quot;Fair&quot;, &quot;Fair&quot;, &quot;Good&quot;, &quot;Good&quot;, &quot;Good…</span></span>
+<span id="cb8-68"><a href="#cb8-68" tabindex="-1"></a><span class="co">#&gt; $ Site_Type        &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span></span>
+<span id="cb8-69"><a href="#cb8-69" tabindex="-1"></a><span class="co">#&gt; $ Site_Width       &lt;dbl&gt; 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0…</span></span>
+<span id="cb8-70"><a href="#cb8-70" tabindex="-1"></a><span class="co">#&gt; $ Wires            &lt;chr&gt; &quot;High voltage&quot;, &quot;High voltage&quot;, &quot;No HV&quot;, &quot;No HV&quot;, &quot;No…</span></span>
+<span id="cb8-71"><a href="#cb8-71" tabindex="-1"></a><span class="co">#&gt; $ Site_Development &lt;chr&gt; &quot;Improved&quot;, &quot;Improved&quot;, &quot;Improved&quot;, &quot;Improved&quot;, &quot;Impr…</span></span>
+<span id="cb8-72"><a href="#cb8-72" tabindex="-1"></a><span class="co">#&gt; $ Site_Size        &lt;chr&gt; &quot;Medium&quot;, &quot;Medium&quot;, &quot;Large&quot;, &quot;Large&quot;, &quot;Large&quot;, &quot;Large…</span></span>
+<span id="cb8-73"><a href="#cb8-73" tabindex="-1"></a><span class="co">#&gt; $ Notes            &lt;chr&gt; &quot;multistem; dbh corrected&quot;, NA, NA, NA, NA, &quot;&lt;Null&gt;&quot;,…</span></span>
+<span id="cb8-74"><a href="#cb8-74" tabindex="-1"></a><span class="co">#&gt; $ Address          &lt;chr&gt; &quot;6132 NE 34TH AVE&quot;, &quot;3405 NE AINSWORTH ST&quot;, &quot;3405 NE …</span></span>
+<span id="cb8-75"><a href="#cb8-75" tabindex="-1"></a><span class="co">#&gt; $ Neighborhood     &lt;chr&gt; &quot;Concordia&quot;, &quot;Concordia&quot;, &quot;Concordia&quot;, &quot;Concordia&quot;, &quot;…</span></span>
+<span id="cb8-76"><a href="#cb8-76" tabindex="-1"></a><span class="co">#&gt; $ Collected_By     &lt;chr&gt; &quot;Volunteer&quot;, &quot;Volunteer&quot;, &quot;Volunteer&quot;, &quot;Volunteer&quot;, &quot;…</span></span>
+<span id="cb8-77"><a href="#cb8-77" tabindex="-1"></a><span class="co">#&gt; $ Scientific       &lt;chr&gt; &quot;Prunus spp.&quot;, &quot;Acer macrophyllum&quot;, &quot;Platanus spp.&quot;, …</span></span>
+<span id="cb8-78"><a href="#cb8-78" tabindex="-1"></a><span class="co">#&gt; $ Family           &lt;chr&gt; &quot;Rosaceae&quot;, &quot;Sapindaceae&quot;, &quot;Platanaceae&quot;, &quot;Cornaceae&quot;…</span></span>
+<span id="cb8-79"><a href="#cb8-79" tabindex="-1"></a><span class="co">#&gt; $ Genus            &lt;chr&gt; &quot;Prunus&quot;, &quot;Acer&quot;, &quot;Platanus&quot;, &quot;Cornus&quot;, &quot;Acer&quot;, &quot;Acer…</span></span>
+<span id="cb8-80"><a href="#cb8-80" tabindex="-1"></a><span class="co">#&gt; $ Common_Name      &lt;chr&gt; &quot;Plum&quot;, &quot;Maple, Bigleaf&quot;, &quot;Planetree&quot;, &quot;Dogwood&quot;, &quot;Ma…</span></span>
+<span id="cb8-81"><a href="#cb8-81" tabindex="-1"></a><span class="co">#&gt; $ Functional_Type  &lt;chr&gt; &quot;BD&quot;, &quot;BD&quot;, &quot;BD&quot;, &quot;BD&quot;, &quot;BD&quot;, &quot;BD&quot;, &quot;BD&quot;, &quot;BD&quot;, &quot;BD&quot;,…</span></span>
+<span id="cb8-82"><a href="#cb8-82" tabindex="-1"></a><span class="co">#&gt; $ Edible           &lt;chr&gt; &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;,…</span></span>
+<span id="cb8-83"><a href="#cb8-83" tabindex="-1"></a><span class="co">#&gt; $ Longitude        &lt;dbl&gt; -122.6296, -122.6296, -122.6294, -122.6297, -122.6297…</span></span>
+<span id="cb8-84"><a href="#cb8-84" tabindex="-1"></a><span class="co">#&gt; $ Latitude         &lt;dbl&gt; 45.56756, 45.56660, 45.56646, 45.56760, 45.56674, 45.…</span></span>
+<span id="cb8-85"><a href="#cb8-85" tabindex="-1"></a><span class="co">#&gt; $ Mature_Size      &lt;fct&gt; S, L, L, S, L, M, M, M, L, M, M, M, M, M, M, S, L, L,…</span></span>
+<span id="cb8-86"><a href="#cb8-86" tabindex="-1"></a><span class="co">#&gt; $ DBH_cm           &lt;dbl&gt; 15.494, 92.202, 52.070, 20.828, 141.478, 47.244, 47.7…</span></span></code></pre></div>
+</div>
+<div id="are-nuisance-trees-commonly-the-inedible-or-edible-trees" class="section level2">
+<h2>Are Nuisance trees commonly the inedible or edible trees?</h2>
+<p>The following code test if Nuisance trees commonly the inedible or
+edible trees with <code>filter</code>, <code>count</code>, and the
+<code>pdxTrees_parks</code> data.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co"># filter out NAs</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>pdxParks_na <span class="ot">&lt;-</span> pdxTrees_Parks <span class="sc">%&gt;%</span> </span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">filter</span>(Edible <span class="sc">==</span> <span class="fu">c</span>(<span class="st">&quot;No&quot;</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;Yes - fruit&quot;</span>, <span class="st">&quot;Yes - nuts&quot;</span>))</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co"># filter nuisance to yes</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>nuisance_parks <span class="ot">&lt;-</span> pdxParks_na <span class="sc">%&gt;%</span> </span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="fu">filter</span>(Nuisance <span class="sc">==</span> <span class="st">&quot;Yes&quot;</span>) </span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a> </span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co"># use count to compare the two</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="fu">count</span>(nuisance_parks, Edible)</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 2</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt;   Edible     n</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt;</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; 1 No        35</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="fu">count</span>(pdxParks_na, Edible)</span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 2</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="co">#&gt;   Edible          n</span></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;int&gt;</span></span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="co">#&gt; 1 No            110</span></span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&gt; 2 Yes             4</span></span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a><span class="co">#&gt; 3 Yes - fruit   134</span></span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="co">#&gt; 4 Yes - nuts    100</span></span></code></pre></div>
+</div>
+<div id="what-neighborhoods-have-the-most-high-voltage-wires-near-trees" class="section level2">
+<h2>What Neighborhoods have the most high voltage wires near trees</h2>
+<p>The following code shows how many high voltage wires are near trees
+in each neighborhood with <code>filter</code>, <code>group_by</code>,
+<code>count</code>, and the <code>pdxTrees_parks</code> data.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co"># grouping to the variables we want to look at and making sure were only looking at high voltage</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>pdxTrees_Streets <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="fu">group_by</span>(Neighborhood, Wires) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="fu">filter</span>(Wires <span class="sc">==</span> <span class="st">&quot;High voltage&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="co">#count high volt wires in each neighborhood</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="fu">count</span>(., Wires) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="co">#arrange in descending order</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; # A tibble: 91 × 3</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; # Groups:   Neighborhood, Wires [91]</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt;    Neighborhood       Wires            n</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;              &lt;chr&gt;        &lt;int&gt;</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt;  1 Richmond           High voltage  2591</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt;  2 Sellwood-Moreland  High voltage  2480</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt;  3 Rose City Park     High voltage  2177</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt;  4 Concordia          High voltage  2152</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt;  5 Irvington          High voltage  2071</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt;  6 Northwest District High voltage  1927</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt;  7 Montavilla         High voltage  1921</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt;  8 St. Johns          High voltage  1698</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt;  9 Woodstock          High voltage  1682</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; 10 Mt. Tabor          High voltage  1615</span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt; # ℹ 81 more rows</span></span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="co">#maybe add in 2026 comparison</span></span></code></pre></div>
+</div>
+<div id="do-big-trees-tend-to-grow-on-larger-sites" class="section level2">
+<h2>Do big trees tend to grow on larger sites</h2>
+<p>The following code compares DBH with site size with
+<code>filter</code>, <code>group_by</code>, <code>count</code>, and the
+<code>pdxTrees_parks</code> data.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co"># grouping to the variables we want to look at and making sure were only looking at high voltage</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>dbh_size <span class="ot">&lt;-</span> pdxTrees_Streets <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="fu">group_by</span>(Site_Size) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avg_dbh =</span> <span class="fu">mean</span>(DBH, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>         <span class="at">trees =</span> <span class="fu">n</span>())</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>dbh_size</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt;   Site_Size avg_dbh trees</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;</span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt; 1 Large       11.8  79145</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="co">#&gt; 2 Medium       9.95 84301</span></span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="co">#&gt; 3 Small        7.46 55156</span></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="co">#add comparison here to 2026 data</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

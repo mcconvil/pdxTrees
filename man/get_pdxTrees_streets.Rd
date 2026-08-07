@@ -5,16 +5,18 @@
 \title{Load the pdxTrees_streets data}
 \source{
 \url{https://www.portland.gov/trees/get-involved/tree-inventory#toc-street-tree-inventory}
+
+\url{https://ufdsworkspace.slack.com/archives/C0B7F6UMFML/p1782153271198439 }
 }
 \usage{
-get_pdxTrees_streets(neighborhood = NULL)
+get_pdxTrees_streets(neighborhood = NULL, version = "2019")
 }
 \arguments{
 \item{neighborhood}{A vector of neighborhood names for filtering the data. 
 If NULL, all street trees will be returned.}
 }
 \value{
-Returns a data frame with 218602 rows and 23 variables:
+Returns a data frame with 23 variables:
 \describe{
   \item{UserID}{ID}
   \item{Inventory_Date}{Date of data collection}
@@ -25,15 +27,15 @@ Returns a data frame with 218602 rows and 23 variables:
   These general ratings reflect whether or not a tree is likely to
    continue contributing to the urban forest (good and fair trees)
     or whether the tree is at or near the end of its life (poor and dead trees).}
-  \item{Site_Type}{Where along the street the tree was located.
+  \item{Site_Type}{Where along the street the tree was located. (this variable only exists in version = "2019")
   There are 8 different site types and more info can be found here:
    \url{https://gis-pdx.opendata.arcgis.com/datasets/PDX::street-tree-inventory-active-records/about}}
-  \item{Site_Size}{Categorical size of the site: Small, Medium, Large}
-  \item{Site_Width}{How wide the site was in ft.}
+  \item{Site_Size}{Categorical size of the site: Small, Medium, Large (this variable only exists in version = "2019")}
+  \item{Site_Width}{How wide the site was in ft. (this variable only exists in version = "2019")}
   \item{Wires}{Whether or not the site had wires: High voltage,
    No High voltage (No HV), other}
   \item{Site_Development}{ The condition of the site either being improved
-   (ex. along a side walk or paved roadway ) or unimproved (a gravel road))}
+   (ex. along a side walk or paved roadway ) or unimproved (a gravel road)) (this variable only exists in version = "2019")}
   \item{Address}{The address where the tree is located}
   \item{Neighborhood}{The Portland neighborhood in which the tree is located}
   \item{Collected_By}{Who collected the data on this tree: staff or volunteer}
@@ -55,7 +57,7 @@ Returns a data frame with 218602 rows and 23 variables:
 \description{
 This function pulls the pdxTrees_streets dataset from the GitHub repository:
 \url{https://github.com/mcconvil/pdxTrees}. pdxTrees_streets is a data frame of
- all the street trees in the 96 neighborhoods of Portland, OR 
+ all the street trees in the 95 neighborhoods of Portland, OR 
  and was collected as part of the Urban Forestry Tree Inventory Project.
 }
 \examples{

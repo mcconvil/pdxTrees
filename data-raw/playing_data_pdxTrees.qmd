@@ -1,0 +1,12 @@
+---
+title: "playing_data_pdxTrees"
+format: html
+---
+
+```{r}
+ggplot( data = pdxTrees_parks, mapping = aes( x = DBH)) +
+  geom_boxplot() +
+  facet_wrap(~ Family)
+
+```
+

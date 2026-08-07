@@ -5,9 +5,13 @@
 \title{Load the pdxTrees_parks data}
 \source{
 \url{https://www.portland.gov/trees/get-involved/tree-inventory#toc-street-tree-inventory}
+
+\url{https://gis-pdx.opendata.arcgis.com/datasets/15ae00ece1bf486a868c0f635d3acbfa_220/explore?location=45.550700\%2C-122.632400\%2C11&showTable=true}
+
+\url{https://gis-pdx.opendata.arcgis.com/datasets/parks/explore?location=45.541200\%2C-122.601300\%2C11&showTable=true}
 }
 \usage{
-get_pdxTrees_parks(park = NULL)
+get_pdxTrees_parks(park = NULL, version = "2019")
 }
 \arguments{
 \item{park}{A vector of park names for filtering the data.
@@ -77,7 +81,7 @@ Returns a data frame of 34 variables where each row is a tree:
 \description{
 This function pulls the pdxTrees_parks dataset from the GitHub repository:
  \url{https://github.com/mcconvil/pdxTrees}. 
- pdxTrees_parks is a data frame of all the trees in 174 parks in Portland, OR
+ pdxTrees_parks is a data frame of all the trees in 174 parks (in the version = "2019" data set) or 316 parks (in the version = "2026" data set) in Portland, OR
  and was collected as part of the Urban Forestry Tree Inventory Project.
 }
 \examples{

@@ -143,3 +143,4 @@ usethis::use_data(pdxTrees_parks, overwrite = TRUE,
 usethis::use_data(pdxTrees_streets, overwrite = TRUE,
                   compress = "xz", version = 2)
 
+

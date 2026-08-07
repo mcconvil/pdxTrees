@@ -12,3 +12,5 @@ README_files
 pdxTrees_parks.csv
 pdxTrees_streets.csv
 ^cran-comments\.md$
+^\.positai$
+^\.claude$
