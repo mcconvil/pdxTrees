@@ -67,7 +67,7 @@ ggplot(data = PDX_parks,
  mapping = aes(x = Tree_Height)) +
  geom_histogram(color = "white",
  fill = "forestgreen",
- bins = 30) +
+ bins = 35) +
   labs(title = "Distribution of Tree Heights in Portland Parks")
 
 ```
@@ -339,6 +339,7 @@ ggplot(data = counts, mapping = aes( axis1 = Common_Name, axis2 = Condition, y =
   scale_x_discrete(limits = c("Species", "Condition")) +
   labs(title = "Condition of Ash Trees on Portland Streets in 2026")
 ```
+
 # Comparing street tree diameters based on family
 
 The following:
