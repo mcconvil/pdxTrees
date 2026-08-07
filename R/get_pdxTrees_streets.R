@@ -66,13 +66,39 @@
 
 
 get_pdxTrees_streets <- function(neighborhood = NULL, version = "2019"){
-
+  
   #matching version 
   version <- match.arg(version, choices = c("2019", "2026"))
   
-  if (version == "2019") {
+  if (version == "2026") {
+    url <- "https://raw.githubusercontent.com/ufds-lab/pdxTrees-package/master/data/Street_Trees_2026.csv"
     # specify column types
-    systems_cols_2 <- readr::cols(
+    systems_cols <- readr::cols(
+      "UserID" = readr::col_character(),
+      `Inventory_Date` = readr::col_datetime(),
+      `Species` = readr::col_character(),
+      `DBH` = readr::col_double(),
+      `Condition` = readr::col_character(),
+      `Wires` = readr::col_character(),
+      `Notes` = readr::col_character(),
+      `Address` = readr::col_character(),
+      `Neighborhood` = readr::col_character(),
+      `Collected_By` = readr::col_character(),
+      `Scientific` = readr::col_character(),
+      `Family` = readr::col_character(),
+      `Genus` = readr::col_character(),
+      `Common_Name` = readr::col_character(),
+      `Functional_Type` = readr::col_character(),
+      `Mature_Size` = readr::col_factor(),
+      `Edible` = readr::col_character(),
+      `Longitude` = readr::col_double(), 
+      `Latitude` = readr::col_double()
+    )
+  }
+  else {
+    # specify column types
+    url <- "https://raw.githubusercontent.com/mcconvil/pdxTrees/master/pdxTrees_streets.csv"
+    systems_cols <- readr::cols(
       "UserID" = readr::col_character(),
       `Inventory_Date` = readr::col_datetime(),
       `Species` = readr::col_character(),
@@ -96,69 +122,23 @@ get_pdxTrees_streets <- function(neighborhood = NULL, version = "2019"){
       `Edible` = readr::col_character(),
       `Longitude` = readr::col_double(), 
       `Latitude` = readr::col_double()
-    )
+    )}
   # grabbing the data 
-  dat_2 <- readr::read_csv("https://raw.githubusercontent.com/mcconvil/pdxTrees/master/pdxTrees_streets.csv",
-                           col_types = systems_cols_2)
+  dat <- readr::read_csv(url, col_types = systems_cols)
   
   # returning the data 
-  if(is.null(neighborhood)) { return(dat_2) }
+  if(is.null(neighborhood)) { return(dat) }
   
   if(!is.null(neighborhood)) {
     # error message if all neighborhoods provided are 
     
     # not in dat_2$Neighborhood
-    if(sum(neighborhood %in% unique(dat_2$Neighborhood)) == 0) { 
+    if(sum(neighborhood %in% unique(dat$Neighborhood)) == 0) { 
       
       stop('Unfortunately the park you listed is not one of the following Neighborhoods:', 
-           print(paste(unique(dat_2$Neighborhood), collapse = ", ")))
+           print(paste(unique(dat$Neighborhood), collapse = ", ")))
     }
     
-    dat_2 %>%
+    dat %>%
       dplyr::filter(.data$Neighborhood %in% neighborhood) %>%
       return()} }
-  
-  if (version == "2026") {
-    # specify column types
-    systems_cols_3 <- readr::cols(
-      "UserID" = readr::col_character(),
-      `Inventory_Date` = readr::col_datetime(),
-      `Species` = readr::col_character(),
-      `DBH` = readr::col_double(),
-      `Condition` = readr::col_character(),
-      `Wires` = readr::col_character(),
-      `Notes` = readr::col_character(),
-      `Address` = readr::col_character(),
-      `Neighborhood` = readr::col_character(),
-      `Collected_By` = readr::col_character(),
-      `Scientific` = readr::col_character(),
-      `Family` = readr::col_character(),
-      `Genus` = readr::col_character(),
-      `Common_Name` = readr::col_character(),
-      `Functional_Type` = readr::col_character(),
-      `Mature_Size` = readr::col_factor(),
-      `Edible` = readr::col_character(),
-      `Longitude` = readr::col_double(), 
-      `Latitude` = readr::col_double()
-    )
-    dat_3 <- readr::read_csv(
-      "https://raw.githubusercontent.com/ufds-lab/pdxTrees-package/master/data/Street_Trees_2026.csv",
-      col_types = systems_cols_3)
-    
-    # returning the data 
-    if(is.null(neighborhood)) { return(dat_3) }
-    
-    if(!is.null(neighborhood)) {
-      # error message if all neighborhoods provided are 
-      
-      # not in dat_2$Neighborhood
-      if(sum(neighborhood %in% unique(dat_3$Neighborhood)) == 0) { 
-        
-        stop('Unfortunately the park you listed is not one of the following Neighborhoods:', 
-             print(paste(unique(dat_3$Neighborhood), collapse = ", ")))
-      }
-      
-      dat_3 %>%
-        dplyr::filter(.data$Neighborhood %in% neighborhood) %>%
-        return()} 
-}}

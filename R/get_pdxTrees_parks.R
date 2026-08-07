@@ -130,9 +130,13 @@ get_pdxTrees_parks <- function(park = NULL, version = "2019"){
   #matching version 
   version <- match.arg(version, choices = c("2019", "2026"))
   
-  if (version == "2019") {
+  if (version == "2026") {
+    url <- "https://raw.githubusercontent.com/ufds-lab/pdxTrees-package/master/data/Park_Trees_2026.csv" }
+  else {
+    url <- "https://raw.githubusercontent.com/mcconvil/pdxTrees/master/pdxTrees_parks.csv" }
+  
   # grabbing the data from github
-  dat <- readr::read_csv("https://raw.githubusercontent.com/mcconvil/pdxTrees/master/pdxTrees_parks.csv",
+  dat <- readr::read_csv(url,
                          col_types = systems_cols)
   # returning the data
   if(is.null(park)){
@@ -153,28 +157,3 @@ get_pdxTrees_parks <- function(park = NULL, version = "2019"){
       dplyr::filter(.data$Park %in% park) %>%
       return()
   } }
-  
-  if (version == "2026") {
-    # grabbing the data from github
-    dat3 <- readr::read_csv("https://github.com/ufds-lab/pdxTrees-package/blob/master/data/Park_Trees_2026.rda",
-                           col_types = systems_cols)
-    # returning the data
-    if(is.null(park)){
-      return(dat3)}
-    
-    if(!is.null(park)){
-      
-      # error message if all parks provided are not
-      # in dat$Park
-      if(sum(park %in% unique(dat3$Park)) == 0) { 
-        
-        stop('Unfortunately the park(s) you listed is(are) not one of the following parks:',
-             print(paste(unique(dat3$Park), collapse = ", ")))  
-      }
-      
-      
-      dat3 %>%
-        dplyr::filter(.data$Park %in% park) %>%
-        return()
-    } } 
-}
