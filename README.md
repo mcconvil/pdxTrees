@@ -1,6 +1,3 @@
-
-
-
 # pdxTrees
 
 `pdxTrees` is a data package composed of information on inventoried
